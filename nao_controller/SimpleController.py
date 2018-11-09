@@ -15,6 +15,7 @@
 ======================================================================================================
 '''
 
+import numpy as np
 from Tkinter import *
 from Config import Config
 from SimpleMotions import SimpleMotions
@@ -51,7 +52,29 @@ class SimpleController:
                 background = "green", 
                 foreground = "black", 
                 command = lambda : self.wrapper(motionObj.moveXYCm(self.moveX.get(), self.moveY.get())))
+
         moveXYButton.pack()
+        
+        def random_walk():
+            self.wrapper(motionObj.moveXYCm(np.random.randint(-100, 40) * 4, 0))
+            self.wrapper(motionObj.moveXYCm(0, np.random.randint(-100, 40) * 4))
+        
+        randButton = Button(  frame, 
+                text = "Random walk", 
+                background = "green", 
+                foreground = "black", 
+                command = random_walk)
+        
+        randButton.pack()
+
+        
+        armsButton = Button(  frame, 
+                text = "ARMS", 
+                background = "green", 
+                foreground = "black", 
+                command = lambda: self.wrapper(motionObj.arms()))
+        
+        armsButton.pack()  
 
         self.makeXEntry()
         self.makeYEntry()

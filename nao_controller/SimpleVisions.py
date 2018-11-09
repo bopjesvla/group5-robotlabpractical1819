@@ -26,7 +26,8 @@ import vision_definitions
 from naoqi import ALProxy
 
 import time
-import Image
+# import Image
+from PIL import Image
 import math
 import numpy as np
 from SimpleMotions import SimpleMotions

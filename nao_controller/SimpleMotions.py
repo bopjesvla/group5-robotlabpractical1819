@@ -177,7 +177,7 @@ class SimpleMotions:
             print "error: either x or y input has to be 0"
 
         #self.standStraight()
-        logObj.logWrite(time.time().__str__() + "_{0}_{1}_{2}_{3}_{4}".format(action, x, y, theta, Config.SPEED))
+        #logObj.logWrite(time.time().__str__() + "_{0}_{1}_{2}_{3}_{4}".format(action, x, y, theta, Config.SPEED))
         return [time.time().__str__(), action, x, y, theta, Config.SPEED]
         pass
 
@@ -193,6 +193,7 @@ class SimpleMotions:
             steps = distance/Config.UNIT
             stepSize = Config.MINSTEPSIZE
         else:
+            print(distance)
             steps = 0
             stepSize = 0
             print("distance is not valid; must be a multiplication of ", Config.UNIT)
@@ -319,6 +320,18 @@ class SimpleMotions:
         angles = [0, 0]
         fractionMaxSpeed = 0.1
         self.motionProxy.setAngles(names, angles, fractionMaxSpeed)
+
+    def arms(self):
+        # # TODO
+        # names = ['RShoulderRoll', 'RShoulderPitch', 'LShoulderRoll', 'LShoulderPitch', 'RHipRoll', 'RHipPitch', 'RKneePitch', 'RAnklePitch', 'RAnkleRoll', 'LHipRoll', 'LHipPitch', 'LKneePitch', 'LAnklePitch', 'LAnkleRoll']
+        # angles = [[-0.3], [0.4], [0.5], [1.0], [0.0], [-0.4, -0.2], [0.95, 1.5], [-0.55, -1], [0.2], [0.0], [-0.4], [0.95], [-0.55], [0.2]]
+        # times =  [[ 0.5], [0.5], [0.5], [0.5], [0.5], [ 0.4,  0.8], [ 0.4, 0.8],  [0.4, 0.8], [0.4], [0.5], [ 0.4], [ 0.4], [ 0.4],  [0.4]]
+        # self.motionProxy.angleInterpolation(names, angles, times, True)
+
+        self.motionProxy.angleInterpolationWithSpeed(['RShoulderPitch'], [1.5], 1.0 , True)
+        
+        self.normalPose(True) #TODO
+        pass
 
     def simpleKickRight(self):
         # TODO

@@ -3,8 +3,9 @@ This is the basic tutorial, showing how to do some basic things with the Nao
 * motion
 '''
 
-from naoqi_hacky import naoqi
-from naoqi_hacky import almath
+# from naoqi_hacky import naoqi
+import naoqi
+# from naoqi_hacky import almath
 import random
 import motion
 

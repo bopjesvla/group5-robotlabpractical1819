@@ -15,7 +15,7 @@ import math
 
 class Config:
 
-    LINUX = True
+    LINUX = False
 
     if LINUX:
         print('-- User has Linux system according to the Config.py')
@@ -27,7 +27,8 @@ class Config:
         LOCATION_NAOQI = None
 
     # Connection
-    ROBOT_IP = "10.42.0.65"
+    # ROBOT_IP = "10.42.0.65"
+    ROBOT_IP = '192.168.1.103'
     PORT = 9559
 
     print('-- Config robot IP: %s' % ROBOT_IP)

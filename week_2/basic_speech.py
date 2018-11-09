@@ -3,12 +3,12 @@ This is the basic tutorial, showing how to do some basic things with the Nao
 * speech
 '''
 
-from naoqi_hacky import naoqi
-
+# from naoqi_hacky import naoqi
+import naoqi
 # --------------------------------------------------------------------------------------
 # Initialize proxies
 # --------------------------------------------------------------------------------------
-ip = '192.168.1.145'
+ip = '192.168.1.103'
 port = 9559
 tts = naoqi.ALProxy('ALTextToSpeech', ip, port)
 
