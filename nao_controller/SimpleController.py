@@ -2,7 +2,7 @@
 ======================================================================================================
  https://github.com/redsphinx/Simple-NAO-Controller
  Written by Gabrielle Ras
- 12 September 2014 
+ 12 September 2014
  version 1.1
 
  This is a simple controller with an interface for the NAO that allows you to quickly take control of:
@@ -22,6 +22,8 @@ from SimpleMotions import SimpleMotions
 from SimpleVisions import SimpleVisions
 from SimpleSounds import SimpleSounds
 
+if Config.LINUX:
+    sys.path.append('%s/pynaoqi-python2.7-2.5.5.5-linux64/lib/python2.7/site-packages' % Config.LOCATION_NAOQI)
 
 root = Tk()
 root.wm_title("Simple NAO Controller v1.1")
@@ -34,89 +36,89 @@ soundObj = SimpleSounds()
 class SimpleController:
     def __init__(self):
         frame.pack_propagate(0)
-        self.createButtons() 
+        self.createButtons()
         frame.pack()
         root.mainloop()
         pass
 
     def createButtons(self):
-        standUpButton = Button( frame, 
-                text = "Stand Up", 
+        standUpButton = Button( frame,
+                text = "Stand Up",
                 background = "green",
                 foreground = "black",
                 command = lambda : self.wrapper(motionObj.fastStand()))
         standUpButton.pack()
 
-        moveXYButton = Button(  frame, 
-                text = "Walk X/Y cm", 
-                background = "green", 
-                foreground = "black", 
+        moveXYButton = Button(  frame,
+                text = "Walk X/Y cm",
+                background = "green",
+                foreground = "black",
                 command = lambda : self.wrapper(motionObj.moveXYCm(self.moveX.get(), self.moveY.get())))
 
         moveXYButton.pack()
-        
+
         def random_walk():
             self.wrapper(motionObj.moveXYCm(np.random.randint(-100, 40) * 4, 0))
             self.wrapper(motionObj.moveXYCm(0, np.random.randint(-100, 40) * 4))
-        
-        randButton = Button(  frame, 
-                text = "Random walk", 
-                background = "green", 
-                foreground = "black", 
+
+        randButton = Button(  frame,
+                text = "Random walk",
+                background = "green",
+                foreground = "black",
                 command = random_walk)
-        
+
         randButton.pack()
 
-        
-        armsButton = Button(  frame, 
-                text = "ARMS", 
-                background = "green", 
-                foreground = "black", 
+
+        armsButton = Button(  frame,
+                text = "ARMS",
+                background = "green",
+                foreground = "black",
                 command = lambda: self.wrapper(motionObj.arms()))
-        
-        armsButton.pack()  
+
+        armsButton.pack()
 
         self.makeXEntry()
         self.makeYEntry()
 
-        rotateButton = Button(  frame, 
-                text = "Rotate in Degrees", 
-                background = "green", 
-                foreground = "black", 
+        rotateButton = Button(  frame,
+                text = "Rotate in Degrees",
+                background = "green",
+                foreground = "black",
                 command = lambda : self.wrapper(motionObj.rotateTheta(self.moveTh.get())))
         rotateButton.pack()
 
         self.makeRotationThetaEntry()
 
-        stopButton = Button(    frame, 
-                text = "STOP!", 
-                background = "red", 
-                foreground = "white", 
+        stopButton = Button(    frame,
+                text = "STOP!",
+                background = "red",
+                foreground = "white",
                 command = lambda : self.wrapper(motionObj.stop()))
         stopButton.pack()
 
-        takePictureButton = Button( frame, 
-                text = "Take a Picture", 
-                background = "blue", 
-                foreground = "black", 
+        takePictureButton = Button( frame,
+                text = "Take a Picture",
+                background = "blue",
+                foreground = "black",
                 command = lambda : self.wrapper(visionObj.takePicture(self.name.get())))
         takePictureButton.pack()
 
         self.makePictureNameEntry()
 
-        speakButton = Button(   frame, 
-                text = "Speak", 
-                background = "blue", 
-                foreground = "black", 
+        speakButton = Button(   frame,
+                text = "Speak",
+                background = "blue",
+                foreground = "black",
                 command = lambda : self.wrapper(soundObj.speak(self.message.get())))
         speakButton.pack()
 
         self.makeMessageEntry()
 
-        moveHeadPitchButton = Button(   frame, 
-                text = "Move Head Pitch", 
+        moveHeadPitchButton = Button(   frame,
+                text = "Move Head Pitch",
                 background = "green",
-                foreground = "black", 
+                foreground = "black",
                 command = lambda : self.wrapper(motionObj.moveHeadPitch(self.headPitchTheta.get(), self.headPitchSpeed.get())))
         moveHeadPitchButton.pack()
 
@@ -124,9 +126,9 @@ class SimpleController:
         self.makeHeadPitchSpeedEntry()
 
         chillOutButton = Button(    frame,
-                text = "Chill Out", 
+                text = "Chill Out",
                 background = "pink",
-                foreground = "black", 
+                foreground = "black",
                 command = lambda : self.wrapper(motionObj.chillOut()))
         chillOutButton.pack()
 

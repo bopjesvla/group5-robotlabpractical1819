@@ -11,15 +11,16 @@
 ======================================================================================================
 '''
 import math
+from sys import platform
 #import almath
 
 class Config:
 
-    LINUX = False
+    LINUX = platform == 'linux' or platform == 'linux2'
 
     if LINUX:
         print('-- User has Linux system according to the Config.py')
-        LOCATION_NAOQI = '/home/user/location/to/be/set'
+        LOCATION_NAOQI = open('../LOCATION').read().strip()
         if LOCATION_NAOQI == '/home/user/location/to/be/set':
             print('-- Error: please specify the NAOqi location')
         print('-- NAOqi location set to %s' % LOCATION_NAOQI)

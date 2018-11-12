@@ -2,13 +2,15 @@
 This is the basic tutorial, showing how to do some basic things with the Nao
 * speech
 '''
-
-# from naoqi_hacky import naoqi
+import sys
+MY_LOCATION = open('../LOCATION').read()
+sys.path.append(MY_LOCATION)
 import naoqi
+
 # --------------------------------------------------------------------------------------
 # Initialize proxies
 # --------------------------------------------------------------------------------------
-ip = '192.168.1.103'
+ip = 'localhost'
 port = 9559
 tts = naoqi.ALProxy('ALTextToSpeech', ip, port)
 
