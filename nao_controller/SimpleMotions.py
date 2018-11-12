@@ -70,12 +70,12 @@ class SimpleMotions:
     # make the robot stand up fast
     def fastStand(self):  # def stand(self, name, speed):
         self.stiffnessOn(motionProxy=self.motionProxy)
-        self.postureProxy.goToPosture("Stand", 1)
+        self.postureProxy.goToPosture("Stand", 0.8)
 
     # make the robot sit
     def sit(self):
         self.stiffnessOn(motionProxy=self.motionProxy)
-        self.postureProxy.goToPosture("SitRelax", 1.0)
+        self.postureProxy.goToPosture("SitRelax", 0.8)
 
     '''
     make the robot move in a direction
@@ -197,7 +197,7 @@ class SimpleMotions:
             steps = 0
             stepSize = 0
             print("distance is not valid; must be a multiplication of ", Config.UNIT)
-            logObj.logWrite("distance is not valid; must be a multiplication of ", Config.UNIT)
+            # logObj.logWrite("distance is not valid; must be a multiplication of ", Config.UNIT)
         return int(steps), stepSize
 
     # set a step with a speed
@@ -371,7 +371,7 @@ class SimpleMotions:
         self.motionProxy.setAngles(['LShoulderRoll', 'LShoulderPitch', 'RShoulderRoll', 'RShoulderPitch'], [0, 1.2, 0, 1.2], 0.4)
         self.motionProxy.setAngles(['LAnkleRoll', 'RAnkleRoll'], [0, 0], 0.05)
 
-# soft kick towards right, left leg
+    # soft kick towards right, left leg
     def sideLeftKick(self):
         self.motionProxy.angleInterpolation(['RAnkleRoll', 'LAnkleRoll'], [-0.2, -0.2], [[0.4], [0.4]], True)
 

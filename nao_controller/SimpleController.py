@@ -22,6 +22,8 @@ from SimpleMotions import SimpleMotions
 from SimpleVisions import SimpleVisions
 from SimpleSounds import SimpleSounds
 
+from SimpleTouch import SimpleTouch
+
 if Config.LINUX:
     sys.path.append('%s/pynaoqi-python2.7-2.5.5.5-linux64/lib/python2.7/site-packages' % Config.LOCATION_NAOQI)
 
@@ -33,11 +35,41 @@ motionObj = SimpleMotions()
 visionObj = SimpleVisions()
 soundObj = SimpleSounds()
 
+touchObj = SimpleTouch()
+
+loopDelay = 100
+
+touchStatus = False
+preTouchStatus = False
+count = 0
+def headTouch():
+	# my code
+	global touchStatus
+	global preTouchStatus
+	touchStatus = touchObj.getHeadTouch()
+	if(touchStatus == True and preTouchStatus == False):
+		preTouchStatus = True
+	elif(touchStatus == False and preTouchStatus == True):
+		preTouchStatus = False
+		global count
+		count += 1
+		if(count%2==1):
+			soundObj.speak("I'm going to Sit")
+			motionObj.sit()
+		else:
+			soundObj.speak("I'm going to Stand")
+			motionObj.stand()
+	else:
+		pass
+	# 
+	root.after(loopDelay, headTouch)
+
 class SimpleController:
     def __init__(self):
         frame.pack_propagate(0)
         self.createButtons()
         frame.pack()
+        root.after(loopDelay, headTouch)
         root.mainloop()
         pass
 
