@@ -150,6 +150,37 @@ class SimpleController:
                 command = lambda : self.wrapper(motionObj.sideLeftKick()))
         kickButton.pack()
 
+        
+        restButton = Button(    frame,
+                text = "Rest",
+                background = "red",
+                foreground = "black",
+                command = lambda : self.wrapper(motionObj.rest()))
+        restButton.pack()
+
+        btnSP = Button(   frame,
+                text = "Shoulder Pitch",
+                background = "blue",
+                foreground = "black",
+                command = lambda : self.wrapper(motionObj.shoulderPitch( float(self.valSP.get()) )))
+        btnSP.pack()
+        self.valShoulderPitch()
+
+        btnSR = Button(   frame,
+                text = "Shoulder Roll",
+                background = "blue",
+                foreground = "black",
+                command = lambda : self.wrapper(motionObj.shoulderRoll( float(self.valSR.get()) )))
+        btnSR.pack()
+        self.valShoulderRoll()
+
+        btnWave = Button(   frame,
+                text = "Wave",
+                background = "red",
+                foreground = "black",
+                command = lambda : self.wrapper(motionObj.waveArm(  )))
+        btnWave.pack()
+
     def makeXEntry(self):
         self.moveX = Entry(frame)
         self.moveX.pack()
@@ -183,6 +214,20 @@ class SimpleController:
         self.message.pack()
         self.message.delete(0, END)
         self.message.insert(0, "Hello! I am a NAO")
+        pass
+
+    def valShoulderPitch(self):
+        self.valSP = Entry(frame)
+        self.valSP.pack()
+        self.valSP.delete(0, END)
+        self.valSP.insert(0, "1.0")
+        pass
+
+    def valShoulderRoll(self):
+        self.valSR = Entry(frame)
+        self.valSR.pack()
+        self.valSR.delete(0, END)
+        self.valSR.insert(0, "1.0")
         pass
 
     def wrapper(self, func):
