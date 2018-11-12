@@ -39,39 +39,18 @@ touchObj = SimpleTouch()
 
 loopDelay = 100
 
-touchStatus = False
-preTouchStatus = False
-count = 0
-def headTouch():
-	# my code
-	global touchStatus
-	global preTouchStatus
-	touchStatus = touchObj.getHeadTouch()
-	if(touchStatus == True and preTouchStatus == False):
-		preTouchStatus = True
-	elif(touchStatus == False and preTouchStatus == True):
-		preTouchStatus = False
-		global count
-		count += 1
-		if(count%2==1):
-			soundObj.speak("I'm going to Sit")
-			motionObj.sit()
-		else:
-			soundObj.speak("I'm going to Stand")
-			motionObj.stand()
-	else:
-		pass
-	# 
-	root.after(loopDelay, headTouch)
-
 class SimpleController:
     def __init__(self):
         frame.pack_propagate(0)
         self.createButtons()
         frame.pack()
-        root.after(loopDelay, headTouch)
+        root.after(loopDelay, self.headTouch)
         root.mainloop()
         pass
+
+    def headTouch(self):
+        touchObj.task3(soundObj, motionObj)
+        root.after(loopDelay, self.headTouch)
 
     def createButtons(self):
         standUpButton = Button( frame,

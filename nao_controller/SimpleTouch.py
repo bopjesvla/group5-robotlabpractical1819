@@ -29,6 +29,9 @@ import time
 import math
 import re
 
+touchStatus = False
+preTouchStatus = False
+count = 0
 
 class SimpleTouch:
     def __init__(self):
@@ -36,11 +39,29 @@ class SimpleTouch:
 
     def getSensors(self):
         lst = self.touchProxy.getStatus()
+        # print status of all sensors
         print lst[8][1]
-        # for x in lst:
-            # print x
 
     def getHeadTouch(self):
         lst = self.touchProxy.getStatus()
-        # print lst[8][1]
+        # return the status of 'head/touch/middle' sensor
         return lst[8][1]
+
+    def task3(self, soundObj, motionObj):
+        global touchStatus
+        global preTouchStatus
+        touchStatus = self.getHeadTouch()
+        if(touchStatus == True and preTouchStatus == False):
+            preTouchStatus = True
+        elif(touchStatus == False and preTouchStatus == True):
+            preTouchStatus = False
+            global count
+            count += 1
+            if(count%2==1):
+                soundObj.speak("I'm going to Sit")
+                motionObj.sit()
+            else:
+                soundObj.speak("I'm going to Stand")
+                motionObj.stand()
+        else:
+            pass
