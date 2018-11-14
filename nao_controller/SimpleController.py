@@ -181,6 +181,13 @@ class SimpleController:
                 command = lambda : self.wrapper(motionObj.waveArm(  )))
         btnWave.pack()
 
+        btnCome = Button(   frame,
+                text = "Gesture Come",
+                background = "red",
+                foreground = "black",
+                command = lambda : self.wrapper(motionObj.gestureCome(  )))
+        btnCome.pack()
+
     def makeXEntry(self):
         self.moveX = Entry(frame)
         self.moveX.pack()
