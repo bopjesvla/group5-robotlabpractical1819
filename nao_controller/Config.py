@@ -24,12 +24,13 @@ class Config:
         if LOCATION_NAOQI == '/home/user/location/to/be/set':
             print('-- Error: please specify the NAOqi location')
         print('-- NAOqi location set to %s' % LOCATION_NAOQI)
+        ROBOT_IP = 'localhost'
     else:
+        ROBOT_IP = '192.168.1.105'
         LOCATION_NAOQI = None
 
     # Connection
     # ROBOT_IP = "10.42.0.65"
-    ROBOT_IP = '192.168.1.103'
     PORT = 9559
 
     print('-- Config robot IP: %s' % ROBOT_IP)
