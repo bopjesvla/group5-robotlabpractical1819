@@ -31,6 +31,7 @@ if Config.LINUX:
 
 import naoqi
 import almath
+import numpy as np
 from naoqi import ALProxy
 
 import time
@@ -41,6 +42,7 @@ import sys
 
 class SimpleMotions:
     def __init__(self):
+        self.pos = np.array([25, 25])
         self.motionProxy = ALProxy("ALMotion", Config.ROBOT_IP, Config.PORT)
         self.postureProxy = ALProxy("ALRobotPosture", Config.ROBOT_IP, Config.PORT)
         robotConfig = self.motionProxy.getRobotConfig()
@@ -342,6 +344,14 @@ class SimpleMotions:
     def shoulderRoll(self, angle):
         # up = 1.5, down = 0
         self.motionProxy.angleInterpolationWithSpeed(['RElbowRoll'], [angle], 0.5)
+
+
+    def random_walk(self):
+        delta = [np.random.randint(-p, 50 - p) for p in self.pos]
+        self.moveXYCm(delta[0] * 4, 0)
+        self.moveXYCm(0, delta[1] * 4)
+        self.pos += delta
+
 
     def gestureCome(self):
         # left
