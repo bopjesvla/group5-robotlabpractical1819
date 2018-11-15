@@ -3,8 +3,9 @@ This is the basic tutorial, showing how to do some basic things with the Nao
 * vision
 '''
 import naoqi
-from naoqi import vision_definitions, ALProxy
+from naoqi import ALProxy
 from PIL import Image
+import vision_definitions
 
 
 ip = '192.168.1.145'
