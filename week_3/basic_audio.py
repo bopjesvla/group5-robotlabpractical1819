@@ -5,7 +5,7 @@ This is the basic tutorial, showing how to do some basic things with the Nao
 '''
 
 import time
-from naoqi_hacky.naoqi import ALProxy
+from naoqi import ALProxy
 
 
 ip = '192.168.1.102'
