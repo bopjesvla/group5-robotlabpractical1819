@@ -2,8 +2,8 @@
 This is the basic tutorial, showing how to do some basic things with the Nao
 * vision
 '''
-from naoqi_hacky import naoqi, vision_definitions
-from naoqi_hacky.naoqi import ALProxy
+import naoqi
+from naoqi import vision_definitions, ALProxy
 from PIL import Image
 
 
