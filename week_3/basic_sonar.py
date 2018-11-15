@@ -4,7 +4,7 @@ This is the basic tutorial, showing how to do some basic things with the Nao
 To stop this program, do a keyboard interrupt in your shell (Ctrl+C)
 '''
 
-from naoqi_hacky.naoqi import ALProxy, ALModule, ALBroker
+from naoqi import ALProxy, ALModule, ALBroker
 import time
 import argparse
 
