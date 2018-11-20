@@ -21,7 +21,7 @@ from Config import Config
 from SimpleMotions import SimpleMotions
 from SimpleVisions import SimpleVisions
 from SimpleSounds import SimpleSounds
-
+from SimpleEyes import SimpleEyes
 from SimpleTouch import SimpleTouch
 
 if Config.LINUX:
@@ -34,6 +34,7 @@ frame = Frame(root, width=Config.FRAMEWIDTH, height=Config.FRAMEHEIGHT)
 motionObj = SimpleMotions()
 visionObj = SimpleVisions()
 soundObj = SimpleSounds()
+eyesObj = SimpleEyes()
 
 touchObj = SimpleTouch()
 
@@ -137,11 +138,21 @@ class SimpleController:
                 command = lambda : self.wrapper(motionObj.sideLeftKick()))
         kickButton.pack()
 
+        def terminate():
+            eyesObj.redEyes()
+            loc = None
+
+            while not loc:
+                loc = visionObj.terminator()
+
+            soundObj.speak("hasta la vista baby")
+            eyesObj.blueEyes()
+
         terminatorButton = Button(    frame,
                 text = "Terminate!",
                 background = "green",
                 foreground = "black",
-                command = lambda : self.wrapper(visionObj.terminator()))
+                command = lambda : self.wrapper(terminate()))
         terminatorButton.pack()
         
         restButton = Button(    frame,

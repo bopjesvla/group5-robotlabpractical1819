@@ -54,6 +54,7 @@ class SimpleVisions:
         videoClient = self.visionProxy.subscribeCamera("python_client", 0, resolution, colorSpace, 5)
         self.visionProxy.setCameraParameter(videoClient, 18, 0)
         picture = self.visionProxy.getImageRemote(videoClient)
+        print "picture taken"
         #picture2 = self.visionProxy.getImageLocal(videoClient)
         self.visionProxy.unsubscribe(videoClient)
         picWidth = picture[0]
@@ -78,7 +79,5 @@ class SimpleVisions:
         b = b.point(lambda i: i / 1.5)
         realPicture = Image.merge('RGB', (r,g,b))
         realPicture.save("terminated.png", "PNG")
-
-        # realPicture.show()
 
         return loc

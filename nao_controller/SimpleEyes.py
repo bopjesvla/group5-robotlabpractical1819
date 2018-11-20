@@ -9,9 +9,9 @@ class SimpleEyes:
         # Example showing how to fade the ears group to mid-intensity
         name = 'FaceLeds'
         duration = 1.0
-        proxy.fadeRGB(name, 1, 0, 0, duration)
+        self.eyeProxy.fadeRGB(name, 1, 0, 0, duration)
     def blueEyes(self):
         # Example showing how to fade the ears group to mid-intensity
         name = 'FaceLeds'
         duration = 1.0
-        proxy.fadeRGB(name, 0, 0, 1, duration)
+        self.eyeProxy.fadeRGB(name, 0, 0, 1, duration)
