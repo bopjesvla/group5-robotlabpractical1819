@@ -80,3 +80,5 @@ class SimpleVisions:
         realPicture.save("terminated.png", "PNG")
 
         # realPicture.show()
+
+        return loc

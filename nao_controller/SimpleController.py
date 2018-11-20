@@ -137,6 +137,12 @@ class SimpleController:
                 command = lambda : self.wrapper(motionObj.sideLeftKick()))
         kickButton.pack()
 
+        terminatorButton = Button(    frame,
+                text = "Terminate!",
+                background = "green",
+                foreground = "black",
+                command = lambda : self.wrapper(visionObj.terminator()))
+        terminatorButton.pack()
         
         restButton = Button(    frame,
                 text = "Rest",
