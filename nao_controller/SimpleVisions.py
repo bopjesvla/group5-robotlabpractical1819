@@ -21,9 +21,11 @@ if Config.LINUX:
     sys.path.append('%s/pynaoqi-python2.7-2.5.5.5-linux64/lib/python2.7/site-packages' % Config.LOCATION_NAOQI)
 
 import naoqi
+import cv2
 import almath
 import vision_definitions
 from naoqi import ALProxy
+import face_recognition
 
 import time
 # import Image
@@ -46,7 +48,7 @@ class SimpleVisions:
 
         pass
 
-    def takePicture(self, theName):
+    def terminator(self, face):
         #motionObj.moveHeadPitch(0.3, 0.4)
         #time.sleep(2)
         videoClient = self.visionProxy.subscribeCamera("python_client", 0, resolution, colorSpace, 5)
@@ -57,7 +59,21 @@ class SimpleVisions:
         picWidth = picture[0]
         picHeight = picture[1]
         array = picture[6]
-        realPicture = Image.fromstring("RGB", (picWidth, picHeight), array)
+        realPicture = Image.frombytes("RGB", (picWidth, picHeight), array)
+        m = np.array(realPicture)
+        loc = face_recognition.face_locations(m)
+        if loc:
+            print loc
+            realPicture.save("analyzeThis.png", "PNG")
+            t, r, b, l = loc[0]
+            m[t:b,l:r,:] = 255
+            realPicture = Image.fromarray(m)
+
+        r, g, b = realPicture.split()
+        r = r.point(lambda i: i * 1.5)
+        g = g.point(lambda i: i / 1.5)
+        b = b.point(lambda i: i / 1.5)
+        realPicture = Image.merge('RGB', (r,g,b))
         # realPicture.save(theName, "PNG")
-        realPicture.save("analyzeThis.png", "JPG")
+
         realPicture.show()
