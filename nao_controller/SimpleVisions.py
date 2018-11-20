@@ -48,7 +48,7 @@ class SimpleVisions:
 
         pass
 
-    def terminator(self, face):
+    def terminator(self):
         #motionObj.moveHeadPitch(0.3, 0.4)
         #time.sleep(2)
         videoClient = self.visionProxy.subscribeCamera("python_client", 0, resolution, colorSpace, 5)
@@ -66,7 +66,10 @@ class SimpleVisions:
             print loc
             realPicture.save("analyzeThis.png", "PNG")
             t, r, b, l = loc[0]
-            m[t:b,l:r,:] = 255
+            m[t:b,l-1:l+1,:] = 255
+            m[t:b,r-1:r+1,:] = 255
+            m[t-1:t+1,l:r,:] = 255
+            m[b-1:b+1,l:r,:] = 255
             realPicture = Image.fromarray(m)
 
         r, g, b = realPicture.split()
@@ -74,6 +77,6 @@ class SimpleVisions:
         g = g.point(lambda i: i / 1.5)
         b = b.point(lambda i: i / 1.5)
         realPicture = Image.merge('RGB', (r,g,b))
-        # realPicture.save(theName, "PNG")
+        realPicture.save("terminated.png", "PNG")
 
-        realPicture.show()
+        # realPicture.show()
