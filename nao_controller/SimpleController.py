@@ -194,6 +194,17 @@ class SimpleController:
                 command = lambda : self.wrapper(motionObj.gestureCome(  )))
         btnCome.pack()
 
+        def faceFollow():
+            print "something"
+            pass
+
+        btnFaceFollow = Button(   frame,
+                text = "Face Follow",
+                background = "red",
+                foreground = "black",
+                command = lambda : self.wrapper( visionObj.faceFollow(  )))
+        btnFaceFollow.pack()
+
     def makeXEntry(self):
         self.moveX = Entry(frame)
         self.moveX.pack()
