@@ -26,7 +26,7 @@ class Config:
         print('-- NAOqi location set to %s' % LOCATION_NAOQI)
         ROBOT_IP = 'localhost'
     else:
-        ROBOT_IP = '192.168.1.105'
+        ROBOT_IP = '192.168.1.104'
         LOCATION_NAOQI = None
 
     # Connection
