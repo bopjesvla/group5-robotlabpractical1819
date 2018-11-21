@@ -19,6 +19,7 @@ import sys
 
 if Config.LINUX:
     sys.path.append('%s/pynaoqi-python2.7-2.5.5.5-linux64/lib/python2.7/site-packages' % Config.LOCATION_NAOQI)
+    import face_recognition
 
 import naoqi
 import cv2
@@ -77,9 +78,9 @@ class SimpleVisions:
 
             draw = ImageDraw.Draw(realPicture)
             # font = ImageFont.truetype(<font-file>, <font-size>)
-            font = ImageFont.truetype("sans-serif.ttf", 16)
             # draw.text((x, y),"Sample Text",(r,g,b))
-            draw.text((0, 0),"Sample Text",(255,255,255),font=font)
+            text = 't: ' + t + '\nb: ' + b '\nr: ' + r + '\nl: ' + l
+            draw.text((0, 0),text,(255,255,255))
 
         r, g, b = realPicture.split()
         r = r.point(lambda i: i * 1.5)
@@ -87,6 +88,7 @@ class SimpleVisions:
         b = b.point(lambda i: i / 1.5)
         realPicture = Image.merge('RGB', (r,g,b))
         realPicture.save("terminated.png", "PNG")
+        realPicture.show()
 
         return loc
 
