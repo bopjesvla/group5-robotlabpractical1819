@@ -73,6 +73,15 @@ class SimpleVisions:
             m[b-1:b+1,l:r,:] = 255
             realPicture = Image.fromarray(m)
 
+            from PIL import ImageFont
+            from PIL import ImageDraw
+
+            draw = ImageDraw.Draw(realPicture)
+            # font = ImageFont.truetype(<font-file>, <font-size>)
+            font = ImageFont.truetype("sans-serif.ttf", 16)
+            # draw.text((x, y),"Sample Text",(r,g,b))
+            draw.text((0, 0),"Sample Text",(255,255,255),font=font)
+
         r, g, b = realPicture.split()
         r = r.point(lambda i: i * 1.5)
         g = g.point(lambda i: i / 1.5)

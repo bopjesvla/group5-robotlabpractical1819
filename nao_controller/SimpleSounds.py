@@ -23,16 +23,65 @@ if Config.LINUX:
 
 import naoqi
 import almath
-from naoqi import ALProxy
+from naoqi import ALProxy, ALModule
 
 import time
 import math
 import re
 
+memory = None
 
-class SimpleSounds:
-    def __init__(self):
+    # def parrot(self):
+    #
+    #     # Example: Adds "yes", "no" and "please" to the vocabulary (without wordspotting)
+    #     vocabulary = ["please", "hermione", "duck", "spinoza", "alpha", "pikachu"]
+    #     self.speechProxy.setVocabulary(vocabulary, False)
+    #
+    #     # Start the speech recognition engine with user Test_speechProxy
+    #     self.speechProxy.subscribe("Test_ASR")
+    #     print 'Speech recognition engine started'
+    #     time.sleep(20)
+    #     self.speechProxy.unsubscribe("Test_ASR")
+class SimpleSounds():
+    def __init__(self, name):
         self.talkProxy = ALProxy("ALTextToSpeech", Config.ROBOT_IP, Config.PORT)
+        # try:
+        #     p = ALProxy(name)
+        #     p.exit()
+        # except:
+        #     pass
+
+        # print('exited existing proxy')
+
+        # ALModule.__init__(self, name)
+        # self.response = False
+        # self.value = []
+        # self.name = name
+        self.response = False
+        self.value = []
+        self.name = name
+        self.spr = ALProxy("ALSpeechRecognition", Config.ROBOT_IP, Config.PORT)
+        self.spr.setVocabulary(['test', 'apple'], True)
+
+        self.memory = ALProxy("ALMemory", Config.ROBOT_IP, Config.PORT)
+
+    def checkSpeech(self):
+        self.response = False
+        # self.value = []
+        # memory.subscribeToEvent("WordRecognized", self.name, "onDetect")
+        # print self.memory.getData('LastWordRecognized')
+
+    def onDetect(self, keyname, value, subscriber_name):
+        self.response = True
+        self.value = value
+        print value
+        memory.unsubscribeToEvent("LastWordRecognized", self.name)
+        self.spr.pause(True)
+
+    def getSpeech(self, wordlist, wordspotting):
+        self.response = False
+        self.value = []
+        self.spr.setVocabulary(wordlist, wordspotting)
 
     def speak(self, word):
         self.talkProxy.say(word)

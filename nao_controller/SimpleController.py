@@ -33,7 +33,8 @@ root.configure(background="white")
 frame = Frame(root, width=Config.FRAMEWIDTH, height=Config.FRAMEHEIGHT)
 motionObj = SimpleMotions()
 visionObj = SimpleVisions()
-soundObj = SimpleSounds()
+soundObj = SimpleSounds("SpeechRecognition")
+soundObj.getSpeech(['test', 'apple'], True)
 eyesObj = SimpleEyes()
 
 touchObj = SimpleTouch()
@@ -45,13 +46,14 @@ class SimpleController:
         frame.pack_propagate(0)
         self.createButtons()
         frame.pack()
-        root.after(loopDelay, self.headTouch)
+        root.after(loopDelay, self.passiveLoop)
         root.mainloop()
         pass
 
-    def headTouch(self):
+    def passiveLoop(self):
         touchObj.task3(soundObj, motionObj)
-        root.after(loopDelay, self.headTouch)
+        soundObj.checkSpeech()
+        root.after(loopDelay, self.passiveLoop)
 
     def createButtons(self):
         standUpButton = Button( frame,

@@ -1,15 +1,19 @@
 import time
+from Config import Config
 import sys
-sys.path.append('/home/gabi/Downloads/pynaoqi-python2.7-2.5.5.5-linux64/lib/python2.7/site-packages')
+
+if Config.LINUX:
+    sys.path.append('%s/pynaoqi-python2.7-2.5.5.5-linux64/lib/python2.7/site-packages' % Config.LOCATION_NAOQI)
+# from .nao_controller.Config import Config
+# if Config.LINUX:
+#     sys.path.append('%s/pynaoqi-python2.7-2.5.5.5-linux64/lib/python2.7/site-packages' % Config.LOCATION_NAOQI)
 import naoqi
 from naoqi import ALModule, ALProxy, ALBroker
 import argparse
 
 
-ip = "192.168.1.103"
-port = 9559
-
 Speecher = None
+# SpeechRecognition = None
 memory = None
 
 
@@ -76,7 +80,7 @@ def main(ip, port):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--ip", type=str, default='192.168.1.103',
+    parser.add_argument("--ip", type=str, default=Config.ROBOT_IP,
                         help="Robot ip address")
     parser.add_argument("--port", type=int, default=9559,
                         help="Robot port number")
