@@ -133,12 +133,48 @@ class SimpleController:
                 command = lambda : self.wrapper(motionObj.chillOut()))
         chillOutButton.pack()
 
-        kickButton = Button(    frame,
-                text = "Kick Right",
-                background = "green",
+        # kickButton = Button(    frame,
+        #         text = "Kick Right",
+        #         background = "green",
+        #         foreground = "black",
+        #         command = lambda : self.wrapper(motionObj.sideLeftKick()))
+        # kickButton.pack()
+
+        week2 = Label(frame, text="----- Week 2 -----")
+        week2.pack()
+
+        week2t1 = Label(frame, text="1. Random walk")
+        week2t1.pack()
+
+        btnWave = Button(   frame,
+                text = "2. Wave",
+                background = "red",
                 foreground = "black",
-                command = lambda : self.wrapper(motionObj.sideLeftKick()))
-        kickButton.pack()
+                command = lambda : self.wrapper(motionObj.waveArm(  )))
+        btnWave.pack()
+
+        btnCome = Button(   frame,
+                text = "2. Gesture Come",
+                background = "red",
+                foreground = "black",
+                command = lambda : self.wrapper(motionObj.gestureCome(  )))
+        btnCome.pack()
+
+        week2t1 = Label(frame, text="3. Touch Sit/Stand")
+        week2t1.pack()
+
+        week3 = Label(frame, text="----- Week 3 -----")
+        week3.pack()
+
+        week3t1 = Label(frame, text="1. Speech recognition")
+        week3t1.pack()
+
+        btnFaceFollow = Button(   frame,
+                text = "2. Face Follow",
+                background = "red",
+                foreground = "black",
+                command = lambda : self.wrapper( visionObj.faceFollow( motionObj , soundObj )))
+        btnFaceFollow.pack()
 
         def terminate():
             eyesObj.redEyes()
@@ -151,19 +187,20 @@ class SimpleController:
             eyesObj.blueEyes()
 
         terminatorButton = Button(    frame,
-                text = "Terminate!",
+                text = "3. Terminate!",
                 background = "green",
                 foreground = "black",
                 command = lambda : self.wrapper(terminate()))
         terminatorButton.pack()
         
-        restButton = Button(    frame,
+        '''restButton = Button(    frame,
                 text = "Rest",
                 background = "red",
                 foreground = "black",
                 command = lambda : self.wrapper(motionObj.rest()))
-        restButton.pack()
+        restButton.pack()'''
 
+        '''
         btnSP = Button(   frame,
                 text = "Shoulder Pitch",
                 background = "blue",
@@ -179,31 +216,11 @@ class SimpleController:
                 command = lambda : self.wrapper(motionObj.shoulderRoll( float(self.valSR.get()) )))
         btnSR.pack()
         self.valShoulderRoll()
+        '''
 
-        btnWave = Button(   frame,
-                text = "Wave",
-                background = "red",
-                foreground = "black",
-                command = lambda : self.wrapper(motionObj.waveArm(  )))
-        btnWave.pack()
+        
 
-        btnCome = Button(   frame,
-                text = "Gesture Come",
-                background = "red",
-                foreground = "black",
-                command = lambda : self.wrapper(motionObj.gestureCome(  )))
-        btnCome.pack()
-
-        def faceFollow():
-            print "something"
-            pass
-
-        btnFaceFollow = Button(   frame,
-                text = "Face Follow",
-                background = "red",
-                foreground = "black",
-                command = lambda : self.wrapper( visionObj.faceFollow( motionObj )))
-        btnFaceFollow.pack()
+        
 
     def makeXEntry(self):
         self.moveX = Entry(frame)
