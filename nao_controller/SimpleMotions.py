@@ -377,22 +377,23 @@ class SimpleMotions:
 
     def waveArm(self):
         # left
-        # self.motionProxy.angleInterpolationWithSpeed(['LShoulderPitch','LShoulderRoll'], [-0.5,1], 0.5)
-        # self.motionProxy.angleInterpolationWithSpeed(['LElbowRoll'], [-1], 0.4)
-        # self.motionProxy.angleInterpolationWithSpeed(['LElbowRoll'], [0], 0.4)
-        # self.motionProxy.angleInterpolationWithSpeed(['LElbowRoll'], [-1], 0.4)
-        # self.motionProxy.angleInterpolationWithSpeed(['LElbowRoll'], [0], 0.4)
+        self.motionProxy.angleInterpolationWithSpeed(['LShoulderPitch','LShoulderRoll'], [-0.5, 1], 0.5)
+        self.motionProxy.angleInterpolationWithSpeed(['LElbowRoll'], [-1], 0.5)
+        self.motionProxy.angleInterpolationWithSpeed(['LElbowRoll'], [0], 0.5)
+        self.motionProxy.angleInterpolationWithSpeed(['LElbowRoll'], [-1], 0.5)
+        self.motionProxy.angleInterpolationWithSpeed(['LElbowRoll'], [0], 0.5)
 
         # all
-        self.motionProxy.angleInterpolationWithSpeed(['LShoulderPitch','LShoulderRoll','RShoulderPitch','RShoulderRoll'], [-0.5, 1, -0.5, -0.5], 0.5)
-        self.motionProxy.angleInterpolationWithSpeed(['RElbowRoll', 'LElbowRoll'], [0, -1], 0.5)
-        self.motionProxy.angleInterpolationWithSpeed(['RElbowRoll', 'LElbowRoll'], [-1, 0], 0.5)
-        self.motionProxy.angleInterpolationWithSpeed(['RElbowRoll', 'LElbowRoll'], [0, -1], 0.5)
+        # self.motionProxy.angleInterpolationWithSpeed(['LShoulderPitch','LShoulderRoll','RShoulderPitch','RShoulderRoll'], [-0.5, 1, -0.5, -0.5], 0.5)
+        # self.motionProxy.angleInterpolationWithSpeed(['RElbowRoll', 'LElbowRoll'], [0, -1], 0.5)
+        # self.motionProxy.angleInterpolationWithSpeed(['RElbowRoll', 'LElbowRoll'], [-1, 0], 0.5)
+        # self.motionProxy.angleInterpolationWithSpeed(['RElbowRoll', 'LElbowRoll'], [0, -1], 0.5)
 
         self.stand()
 
     def handsDown(self):
-        self.motionProxy.angleInterpolationWithSpeed(['LShoulderPitch','LShoulderRoll','RShoulderPitch','RShoulderRoll'], [1.5, 0, 1, 0], 0.5)
+        self.motionProxy.angleInterpolationWithSpeed(['LShoulderPitch','LShoulderRoll'], [1.5, 0], 0.5)
+        # self.motionProxy.angleInterpolationWithSpeed(['LShoulderPitch','LShoulderRoll','RShoulderPitch','RShoulderRoll'], [1.5, 0, 1, 0], 0.5)
         
 
     def simpleKickRight(self):
