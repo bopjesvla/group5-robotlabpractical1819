@@ -283,7 +283,7 @@ class SimpleMotions:
 
         #  take last step?
         self.stand()
-        logObj.logWrite(time.time().__str__() + "_{0}_{1}_{2}_{3}_{4}".format(action, x, y, theta, Config.SPEED))
+        # logObj.logWrite(time.time().__str__() + "_{0}_{1}_{2}_{3}_{4}".format(action, x, y, theta, Config.SPEED))
         theta = theta*Config.DEG2RAD # sends theta in radians
 
         return [time.time().__str__(), action, x, y, theta, Config.SPEED]
@@ -305,6 +305,11 @@ class SimpleMotions:
         theta = float(theta)
         speed = float(speed)
         self.motionProxy.setAngles("HeadPitch", theta, 0.1)
+
+    def moveHeadYaw(self, theta, speed):
+        theta = float(theta)
+        speed = float(speed)
+        self.motionProxy.setAngles("HeadYaw", theta, 0.1)
 
     def chillOut(self):
         self.stiffnessOn(motionProxy=self.motionProxy)

@@ -46,7 +46,7 @@ class SimpleController:
         frame.pack_propagate(0)
         self.createButtons()
         frame.pack()
-        root.after(loopDelay, self.passiveLoop)
+        # root.after(loopDelay, self.passiveLoop)
         root.mainloop()
         pass
 
@@ -120,7 +120,7 @@ class SimpleController:
                 text = "Move Head Pitch",
                 background = "green",
                 foreground = "black",
-                command = lambda : self.wrapper(motionObj.moveHeadPitch(self.headPitchTheta.get(), self.headPitchSpeed.get())))
+                command = lambda : self.wrapper(motionObj.moveHeadYaw(self.headPitchTheta.get(), self.headPitchSpeed.get())))
         moveHeadPitchButton.pack()
 
         self.makeHeadPitchThetaEntry()
@@ -202,7 +202,7 @@ class SimpleController:
                 text = "Face Follow",
                 background = "red",
                 foreground = "black",
-                command = lambda : self.wrapper( visionObj.faceFollow(  )))
+                command = lambda : self.wrapper( visionObj.faceFollow( motionObj )))
         btnFaceFollow.pack()
 
     def makeXEntry(self):
