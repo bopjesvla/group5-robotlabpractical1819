@@ -79,8 +79,8 @@ class SimpleVisions:
             draw = ImageDraw.Draw(realPicture)
             # font = ImageFont.truetype(<font-file>, <font-size>)
             # draw.text((x, y),"Sample Text",(r,g,b))
-            text = 't: ' + t + '\nb: ' + b '\nr: ' + r + '\nl: ' + l
-            draw.text((0, 0),text,(255,255,255))
+            # text = 't: ' + t + '\nb: ' + b '\nr: ' + r + '\nl: ' + l
+            # draw.text((0, 0),text,(255,255,255))
 
         r, g, b = realPicture.split()
         r = r.point(lambda i: i * 1.5)
@@ -92,39 +92,58 @@ class SimpleVisions:
 
         return loc
 
-    def faceFollow(self):
+    def faceFollow(self, motionObj, soundObj):
         print 'face follow'
         cams = self.visionProxy.getSubscribers()
         for cam in cams:
             self.visionProxy.unsubscribe(cam)
-        # videoClient = self.visionProxy.subscribeCamera("python_client", 0, resolution, colorSpace, 5)
-        # self.visionProxy.setCameraParameter(videoClient, 18, 0)
         haar_face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
-        for n in range(0, 3):
-            try:
-                print 'loop',n
-                videoClient = self.visionProxy.subscribeCamera("python_client", 0, resolution, colorSpace, 5)
-                self.visionProxy.setCameraParameter(videoClient, 18, 0)
-                picture = self.visionProxy.getImageRemote(videoClient)
-                self.visionProxy.unsubscribe(videoClient)
-                picWidth = picture[0]
-                picHeight = picture[1]
-                array = picture[6]
-                realPicture = Image.frombytes("RGB", (picWidth, picHeight), array)
-                realPicture.save('image_{}.png'.format(n), "PNG")
+        for n in range(0, 5):
+            # try:
+            print 'loop',n
+            videoClient = self.visionProxy.subscribeCamera("python_client", 0, resolution, colorSpace, 5)
+            self.visionProxy.setCameraParameter(videoClient, 18, 0)
+            picture = self.visionProxy.getImageRemote(videoClient)
+            self.visionProxy.unsubscribe(videoClient)
+            picWidth = picture[0]
+            picHeight = picture[1]
+            array = picture[6]
+            realPicture = Image.frombytes("RGB", (picWidth, picHeight), array)
+            realPicture.save('image_{}.png'.format(n), "PNG")
 
-                image = cv2.imread('image_{}.png'.format(n))
-                faces = haar_face_cascade.detectMultiScale(image, minNeighbors=5); 
-                print faces
-                print len(faces)
-                if len(faces)>0:
-                    scale = 0
-                    (x, y, w, h) = faces[0]   
-                    # cv2.rectangle(test1, (x, y), (x+w, y+h), (0, 255, 0), 2)
-                    scale = np.sqrt(w**2 + h**2)
-                    print x, y, w, h, scale
-            except Exception, e:
-                print e
+            image = cv2.imread('image_{}.png'.format(n))
+            faces = haar_face_cascade.detectMultiScale(image, minNeighbors=5); 
+            print faces
+            if len(faces)>0:
+                soundObj.speak('face found')
+                scale = 0
+                (x, y, w, h) = faces[0]
+                cx = x + w/2.
+                cy = y + h/2.
+
+                rotateX = -((cx/640.)-0.5)*60.97
+                rotateY = ((cy/480.)-0.5)*np.radians(47.64)
+                rotateX = rotateX//10*10
+                motionObj.rotateTheta(rotateX)
+                motionObj.moveHeadPitch(rotateY, 0.5)
+
+                scale = np.sqrt(w**2 + h**2)
+                dist = (-58./55.)*scale + 235.
+                print 'distance:', dist
+                if dist<50.:
+                    break
+                walksteps = max(((dist - 50)//8)*4, 8)
+
+                print walksteps
+                if walksteps>0:
+                    motionObj.moveXYCm(walksteps,0)
+            
+            # except Exception, e:
+            #     print e
                 # self.visionProxy.unsubscribe(videoClient)
+        print "done"
+        soundObj.speak('Hi')
+        motionObj.waveArm()
+
         pass
