@@ -28,7 +28,7 @@ from naoqi import ALProxy
 
 import time
 # import Image
-from PIL import Image
+from PIL import Image, ImageTk
 import math
 import numpy as np
 from SimpleMotions import SimpleMotions
@@ -45,6 +45,13 @@ class SimpleVisions:
         self.visionProxy = ALProxy("ALVideoDevice", Config.ROBOT_IP, Config.PORT)
         self.motionProxy = ALProxy("ALMotion", Config.ROBOT_IP, Config.PORT)
         pass
+
+    def showImage(self, img):
+        rootImage = Tk()
+        img = Image.open("analyzeThis.png")
+        tkimage = ImageTk.PhotoImage(img)
+        Label(rootImage, image=tkimage).pack()
+        rootImage.mainloop()
 
     def terminator(self):
         #motionObj.moveHeadPitch(0.3, 0.4)

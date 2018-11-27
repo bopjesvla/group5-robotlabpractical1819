@@ -294,4 +294,4 @@ class SimpleController:
         self.headPitchSpeed.insert(0, "0.5")
         pass
 
-SimpleController = SimpleController()
+controller = SimpleController()
