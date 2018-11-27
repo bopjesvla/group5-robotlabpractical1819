@@ -65,9 +65,9 @@ class SimpleMotions:
         motionProxy.stiffnessInterpolation(allJoints, pStiffnessLists, pTimeLists)
 
     # make robot stand up
-    def stand(self):  # def stand(self, name, speed):
+    def stand(self, speed=0.4):  # def stand(self, name, speed):
         self.stiffnessOn(motionProxy=self.motionProxy)
-        self.postureProxy.goToPosture("Stand", 0.4)
+        self.postureProxy.goToPosture("Stand", speed)
 
     # make the robot stand up fast
     def fastStand(self):  # def stand(self, name, speed):

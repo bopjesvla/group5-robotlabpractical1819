@@ -19,14 +19,12 @@ import sys
 
 if Config.LINUX:
     sys.path.append('%s/pynaoqi-python2.7-2.5.5.5-linux64/lib/python2.7/site-packages' % Config.LOCATION_NAOQI)
-    import face_recognition
 
 import naoqi
 import cv2
 import almath
 import vision_definitions
 from naoqi import ALProxy
-# import face_recognition
 
 import time
 # import Image
@@ -62,11 +60,14 @@ class SimpleVisions:
         array = picture[6]
         realPicture = Image.frombytes("RGB", (picWidth, picHeight), array)
         m = np.array(realPicture)
-        loc = face_recognition.face_locations(m)
-        if loc:
-            print loc
+        haar_face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+        faces = haar_face_cascade.detectMultiScale(m, minNeighbors=5)
+        print faces
+        if len(faces)>0:
+            (l, t, w, h) = faces[0]
+            r = l + w
+            b = t + h
             realPicture.save("analyzeThis.png", "PNG")
-            t, r, b, l = loc[0]
             m[t:b,l-1:l+1,:] = 255
             m[t:b,r-1:r+1,:] = 255
             m[t-1:t+1,l:r,:] = 255
@@ -79,8 +80,8 @@ class SimpleVisions:
             draw = ImageDraw.Draw(realPicture)
             # font = ImageFont.truetype(<font-file>, <font-size>)
             # draw.text((x, y),"Sample Text",(r,g,b))
-            # text = 't: ' + t + '\nb: ' + b '\nr: ' + r + '\nl: ' + l
-            # draw.text((0, 0),text,(255,255,255))
+            text = 't: {}\nb: {}\nr: {}\nl: {}'.format(t, b, r, l)
+            draw.text((10, 10),text,(0,0,0))
 
         r, g, b = realPicture.split()
         r = r.point(lambda i: i * 1.5)
@@ -90,7 +91,7 @@ class SimpleVisions:
         realPicture.save("terminated.png", "PNG")
         realPicture.show()
 
-        return loc
+        return faces
 
     def faceFollow(self, motionObj, soundObj):
         print 'face follow'
