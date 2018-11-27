@@ -63,8 +63,8 @@ class SimpleVisions:
         haar_face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
         faces = haar_face_cascade.detectMultiScale(m, minNeighbors=5)
         print faces
-        if len(faces)>0:
-            (l, t, w, h) = faces[0]
+        for face in faces:
+            (l, t, w, h) = face
             r = l + w
             b = t + h
             realPicture.save("analyzeThis.png", "PNG")
@@ -77,17 +77,18 @@ class SimpleVisions:
             from PIL import ImageFont
             from PIL import ImageDraw
 
+        if len(faces) > 0:
             draw = ImageDraw.Draw(realPicture)
             # font = ImageFont.truetype(<font-file>, <font-size>)
             # draw.text((x, y),"Sample Text",(r,g,b))
             text = 't: {}\nb: {}\nr: {}\nl: {}'.format(t, b, r, l)
             draw.text((10, 10),text,(0,0,0))
 
-        r, g, b = realPicture.split()
-        r = r.point(lambda i: i * 1.5)
-        g = g.point(lambda i: i / 1.5)
-        b = b.point(lambda i: i / 1.5)
-        realPicture = Image.merge('RGB', (r,g,b))
+        # r, g, b = realPicture.split()
+        # r = r.point(lambda i: i * 1.5)
+        # g = g.point(lambda i: i / 1.5)
+        # b = b.point(lambda i: i / 1.5)
+        # realPicture = Image.merge('RGB', (r,g,b))
         realPicture.save("terminated.png", "PNG")
         realPicture.show()
 

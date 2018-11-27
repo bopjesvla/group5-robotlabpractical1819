@@ -46,12 +46,15 @@ class SimpleController:
         frame.pack_propagate(0)
         self.createButtons()
         frame.pack()
-        # root.after(loopDelay, self.passiveLoop)
+        root.after(loopDelay, self.passiveLoop)
         root.mainloop()
         pass
 
     def passiveLoop(self):
-        touchObj.task3(soundObj, motionObj)
+        # touchObj.task3(soundObj, motionObj)
+        say = touchObj.oof()
+        if say:
+            soundObj.speak(say)
         soundObj.checkSpeech()
         root.after(loopDelay, self.passiveLoop)
 

@@ -47,6 +47,13 @@ class SimpleTouch:
         # return the status of 'head/touch/middle' sensor
         return lst[8][1]
 
+    def oof(self):
+        lst = self.touchProxy.getStatus()
+        if any('Head' in name and s for name, s, _ in lst):
+            return "ouch"
+        if any('Foot' in name and s for name, s, _ in lst):
+            return "oof"
+
     def task3(self, soundObj, motionObj):
         global touchStatus
         global preTouchStatus
