@@ -1,6 +1,10 @@
 import sys
-from naoqi import ALProxy
 from Config import Config
+
+if Config.LINUX:
+    sys.path.append('%s/pynaoqi-python2.7-2.5.5.5-linux64/lib/python2.7/site-packages' % Config.LOCATION_NAOQI)
+
+from naoqi import ALProxy
 
 class SimpleEyes:
     def __init__(self):

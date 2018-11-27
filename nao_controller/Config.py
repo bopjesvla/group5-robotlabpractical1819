@@ -12,6 +12,7 @@
 '''
 import math
 from sys import platform
+import os
 #import almath
 
 class Config:
@@ -24,10 +25,13 @@ class Config:
         if LOCATION_NAOQI == '/home/user/location/to/be/set':
             print('-- Error: please specify the NAOqi location')
         print('-- NAOqi location set to %s' % LOCATION_NAOQI)
+    else:
+        LOCATION_NAOQI = None
+
+    if os.getlogin() == 'bob':
         ROBOT_IP = 'localhost'
     else:
         ROBOT_IP = '192.168.1.104'
-        LOCATION_NAOQI = None
 
     # Connection
     # ROBOT_IP = "10.42.0.65"
