@@ -394,7 +394,26 @@ class SimpleMotions:
     def handsDown(self):
         self.motionProxy.angleInterpolationWithSpeed(['LShoulderPitch','LShoulderRoll'], [1.5, 0], 0.5)
         # self.motionProxy.angleInterpolationWithSpeed(['LShoulderPitch','LShoulderRoll','RShoulderPitch','RShoulderRoll'], [1.5, 0, 1, 0], 0.5)
-        
+    
+    def getAngles(self):
+        names = ['LShoulderRoll', 'LShoulderPitch','LElbowRoll', 'LElbowYaw', 'LWristYaw']
+        angles = self.motionProxy.getAngles(names, False)
+        print(names)
+        print(angles)
+
+        # stand
+        # ['LShoulderRoll', 'LShoulderPitch', 'LElbowRoll', 'LElbowYaw', 'LWristYaw']
+        # [0.18541915714740753, 1.4723570346832275, -0.4103873670101166, -1.1937023401260376, 0.09999998658895493]
+
+        # point
+        # ['LShoulderRoll', 'LShoulderPitch', 'LElbowRoll', 'LElbowYaw', 'LWristYaw']
+        # [-0.09514999389648438, -0.1733839511871338, -0.15335798263549805, -0.21786999702453613, 0.2530679702758789] 
+    def handDown(self):
+        self.motionProxy.angleInterpolationWithSpeed(['LShoulderRoll', 'LShoulderPitch', 'LElbowRoll', 'LElbowYaw', 'LWristYaw'], [0.18541915714740753, 1.4723570346832275, -0.4103873670101166, -1.1937023401260376, 0.09999998658895493], 0.5)
+    
+    def point(self):
+        self.motionProxy.angleInterpolationWithSpeed(['LShoulderRoll', 'LShoulderPitch', 'LElbowRoll', 'LElbowYaw', 'LWristYaw'], [-0.09514999389648438, -0.1733839511871338, -0.15335798263549805, -0.21786999702453613, 0.2530679702758789], 0.5)
+
 
     def simpleKickRight(self):
         # TODO

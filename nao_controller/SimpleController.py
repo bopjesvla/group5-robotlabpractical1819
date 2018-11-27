@@ -66,6 +66,12 @@ class SimpleController:
                 command = lambda : self.wrapper(motionObj.fastStand()))
         standUpButton.pack()
 
+        Button( frame,
+                text = "sit",
+                background = "green",
+                foreground = "black",
+                command = lambda : self.wrapper(motionObj.sit())).pack()
+
         randButton = Button(  frame,
                 text = "Random walk",
                 background = "green",
@@ -196,12 +202,11 @@ class SimpleController:
                 command = lambda : self.wrapper(terminate()))
         terminatorButton.pack()
         
-        '''restButton = Button(    frame,
+        Button(    frame,
                 text = "Rest",
                 background = "red",
                 foreground = "black",
-                command = lambda : self.wrapper(motionObj.rest()))
-        restButton.pack()'''
+                command = lambda : self.wrapper(motionObj.rest())).pack()
 
         '''
         btnSP = Button(   frame,
@@ -221,7 +226,26 @@ class SimpleController:
         self.valShoulderRoll()
         '''
 
+        week4 = Label(frame, text="----- Week 4 -----")
+        week4.pack()
+
+        # week4t1 = Label(frame, text="1. Speech recognition")
+        # week4t1.pack()
+
+        Button(   frame,
+                text = "Arrival 9",
+                background = "red",
+                foreground = "black",
+                # command = lambda : self.wrapper( audioObj.playThunder(  ))).pack()
+                command = lambda : self.wrapper( self.arrival_9() )).pack()
         
+        Button(   frame,
+                text = "down",
+                background = "red",
+                foreground = "black",
+                # command = lambda : self.wrapper( audioObj.playThunder(  ))).pack()
+                command = lambda : self.wrapper( motionObj.handDown(  ))).pack()
+          
 
         
 
