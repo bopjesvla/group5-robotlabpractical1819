@@ -63,6 +63,11 @@ class SimpleSounds():
         self.spr = ALProxy("ALSpeechRecognition", Config.ROBOT_IP, Config.PORT)
         self.spr.setVocabulary(['test', 'apple'], True)
 
+        self.finished = True
+        self.audioPlayer = ALProxy("ALAudioPlayer", Config.ROBOT_IP, Config.PORT)
+        # self.soundSet = self.getParameter("SoundSet")
+        # self.sounds = self.getParameter("Sounds")
+
         self.memory = ALProxy("ALMemory", Config.ROBOT_IP, Config.PORT)
 
     def checkSpeech(self):
@@ -85,3 +90,13 @@ class SimpleSounds():
 
     def speak(self, word):
         self.talkProxy.say(word)
+
+    def playThunder(self):
+        if self.soundset in self.audioPlayer.getLoadedSoundSetsList():
+            print self.sounds
+            sound = random.choice(self.sounds.split())
+            self.audioPlayer.playSoundSetFile(self.soundset, sound)
+        else:
+            self.log("Soundset not installed: " + str(self.soundset))
+        self.finished = True
+        self.onStopped()
