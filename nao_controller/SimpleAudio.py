@@ -33,31 +33,7 @@ import re
 class SimpleAudio():
     def __init__(self):
         self.aup = ALProxy("ALAudioPlayer", Config.ROBOT_IP, Config.PORT)
-        # self.aup = ALProxy("ALSoundPlayback", Config.ROBOT_IP, Config.PORT)
-
-     
-    # def playThunder(self):
-    #     if self.soundset in self.audioPlayer.getLoadedSoundSetsList():
-    #         print self.sounds
-    #         sound = random.choice(self.sounds.split())
-    #         self.audioPlayer.playSoundSetFile(self.soundset, sound)
-    #     else:
-    #         self.log("Soundset not installed: " + str(self.soundset))
-    #     self.finished = True
-    #     self.onStopped()
     
     def playThunder(self):
-        # print "thunder"
-        # fileId = 
-        # self.aup.playFile("C:/Users/Sameera/Downloads/thunder3.wav")
-        # time.sleep(5)
-        # fileId = self.aup.post.playFile("C:/Users/Sameera/Downloads/thunder3.wav")
-        # self.aup.playWavFile("C:/Users/Sameera/Downloads/thunder3.wav")
-        # self.aup.play(fileId)
-
-        fileId = self.aup.loadFile("C:/Users/Sameera/Downloads/thunder3.wav")
+        fileId = self.aup.loadFile("/home/nao/thunder3.wav")
         self.aup.play(fileId)
-        # self.aup.play(fileId, _async=True)
-        
-        time.sleep(3)
-        print 'sdfdf'

@@ -28,13 +28,13 @@ class Config:
     else:
         LOCATION_NAOQI = None
 
-    if os.getlogin() == 'bob':
-        ROBOT_IP = 'localhost'
-    else:
-        ROBOT_IP = '192.168.1.104'
+    # if os.getlogin() == 'bob':
+    #     ROBOT_IP = 'localhost'
+    # else:
+    #     ROBOT_IP = '192.168.1.104'
 
     # Connection
-    # ROBOT_IP = "10.42.0.65"
+    ROBOT_IP = '192.168.1.104'
     PORT = 9559
 
     print('-- Config robot IP: %s' % ROBOT_IP)
