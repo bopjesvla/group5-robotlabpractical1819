@@ -291,7 +291,7 @@ class SimpleController:
             faces = []
 
             #facePositions = [100./2., 100./2., 100.*-2., 100./-2., 100./-2.]
-            facePositions = [-100, -60, -20, 20, 60, 100]
+            facePositions = [-40, -20, 0, 20, 40]
             while len(faces) < 3:
                 for p in facePositions:
                     faces = visionObj.terminator(self.panel, root)
