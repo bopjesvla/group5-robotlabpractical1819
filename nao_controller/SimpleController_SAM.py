@@ -248,20 +248,26 @@ class SimpleController:
 			soundObj.speak("I need your clothes, your boots and your motorcycle.")
 			
 		Button(   frame,
-				text = "clothing_8",
+				text = "Crouch",
 				background = "red",
 				foreground = "black",
 				# command = lambda : self.wrapper( audioObj.playThunder(  ))).pack()
 				# command = lambda : self.wrapper( arrival_9() )).pack()
-				command = lambda : self.wrapper( clothing_8() )).pack()
-
+				# command = lambda : self.wrapper( motionObj.Crouch() )).pack()
+				command = lambda : self.wrapper( motionObj.Crouch() )).pack()
 		Button(   frame,
-				text = "target",
+				text = "kneelPosture",
+				background = "blue",
+				foreground = "white",
+				command = lambda : self.wrapper( motionObj.kneelPosture() )).pack()
+		Button(   frame,
+				text = "get angles",
 				background = "red",
 				foreground = "black",
-				command = lambda : self.wrapper( visionObj.targetDetection(  ))).pack()
+				# command = lambda : self.wrapper( visionObj.targetDetection(  ))).pack()
 				# command = lambda : self.wrapper( motionObj.handDown(  ))).pack()
-	
+				command = lambda : self.wrapper( motionObj.getAngles(  ))).pack()
+		
 
     def makeXEntry(self):
         self.moveX = Entry(frame)
