@@ -270,13 +270,17 @@ class SimpleController:
             eyesObj.noEyes()
 
             #Step2: Kneel
+            motionObj.kneelPosture()
 
             #Step3: Thunder sound
-            #soundObj.speak("THUNDER") #Replace me with real code
+            soundObj.playThunder() #Replace me with real code
 
             #Step4: Stand up from Kneeling
+            motionObj.Crouch()
+            motionObj.stand()
 
             #Step5: Level Head to horizontal
+            motionObj.moveHeadPitch(0)
 
             #Step6: White eyes when head is level
             eyesObj.whiteEyes()
@@ -292,7 +296,7 @@ class SimpleController:
                     motionObj.moveHeadYaw(np.radians(p),0.1)
 
 
-                    #Step9: Points to center face and speaks
+            #Step9: Points to center face and speaks
             # faces.sort()
             (x, y, w, h) = faces[1]
             cx = x + w / 2.
@@ -358,7 +362,7 @@ class SimpleController:
     def wrapper(self, func):
         func
         root.update()
-        motionObj.stiffnessOff(motionObj.motionProxy)
+        motionObj.relax()
         #self.update()
         pass
 
