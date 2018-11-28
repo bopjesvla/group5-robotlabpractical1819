@@ -236,12 +236,10 @@ class SimpleVisions:
                     maxRadius=100)          #Maximum circle radius
                 
                 if circles is not None:
-                    print(circles)
-                    for x, y, r in circles[0]:
-                        cv2.circle(image, (x, y), r, (255, 255, 0), 5)
-                    # return True
-                imagePil = Image.fromarray(image)
-                imagePil.save('balldect_{}.png'.format(n), "PNG")
+                    # print(circles)
+                    # for x, y, r in circles[0]:
+                    #     cv2.circle(image, (x, y), r, (255, 255, 0), 5)
+                    return circles[0]
+                # imagePil = Image.fromarray(image)
+                # imagePil.save('balldect_{}.png'.format(n), "PNG")
                 # imagePil.show()
-            
-        return False

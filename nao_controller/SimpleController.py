@@ -291,12 +291,15 @@ class SimpleController:
             faces = []
 
             #facePositions = [100./2., 100./2., 100.*-2., 100./-2., 100./-2.]
-            facePositions = [-100, -60, -20, 20, 60, 100]
-            while len(faces) < 3:
+            facePositions = [-40, -20, 0, 20, 40]
+            while True:
                 for p in facePositions:
                     faces = visionObj.terminator(self.panel, root)
+                    if len(faces) > 2:
+                        break
                     motionObj.moveHeadYaw(np.radians(p),0.1)
 
+            x, y, r = visionObj.targetDetection()
 
             #Step9: Points to center face and speaks
             # faces.sort()
@@ -308,7 +311,9 @@ class SimpleController:
             rotateY = ((cy / 480.) - 0.5) * np.radians(47.64)
             rotateX = rotateX // 10 * 10
             motionObj.rotateTheta(rotateX)
-            motionObj.moveHeadPitch(rotateY, 0.5)
+            # motionObj.moveHeadPitch(rotateY, 0.5)
+
+            motionObj.point()
             soundObj.speak("Start process: Acquiring apparel")
 
 
