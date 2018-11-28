@@ -301,6 +301,7 @@ class SimpleController:
     def wrapper(self, func):
         func
         root.update()
+        motionObj.stiffnessOff(motionObj.motionProxy)
         #self.update()
         pass
 
