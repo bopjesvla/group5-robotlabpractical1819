@@ -24,6 +24,7 @@ from SimpleVisions import SimpleVisions
 from SimpleSounds import SimpleSounds
 from SimpleEyes import SimpleEyes
 from SimpleTouch import SimpleTouch
+from SimpleAudio import SimpleAudio
 
 if Config.LINUX:
     sys.path.append('%s/pynaoqi-python2.7-2.5.5.5-linux64/lib/python2.7/site-packages' % Config.LOCATION_NAOQI)
@@ -38,6 +39,7 @@ visionObj = SimpleVisions()
 soundObj = SimpleSounds("SpeechRecognition")
 soundObj.getSpeech(['test', 'apple'], True)
 eyesObj = SimpleEyes()
+audioObj = SimpleAudio()
 
 touchObj = SimpleTouch()
 
@@ -273,14 +275,14 @@ class SimpleController:
             motionObj.kneelPosture()
 
             #Step3: Thunder sound
-            soundObj.playThunder() #Replace me with real code
+            audioObj.playThunder() #Replace me with real code
 
             #Step4: Stand up from Kneeling
             motionObj.Crouch()
             motionObj.stand()
 
             #Step5: Level Head to horizontal
-            motionObj.moveHeadPitch(0)
+            motionObj.moveHeadPitch(-.3, 1)
 
             #Step6: White eyes when head is level
             eyesObj.whiteEyes()
@@ -292,7 +294,7 @@ class SimpleController:
             facePositions = [-100, -60, -20, 20, 60, 100]
             while len(faces) < 3:
                 for p in facePositions:
-                    faces = visionObj.terminator()
+                    faces = visionObj.terminator(self.panel, root)
                     motionObj.moveHeadYaw(np.radians(p),0.1)
 
 
@@ -361,8 +363,9 @@ class SimpleController:
 
     def wrapper(self, func):
         func
+        motionObj.sit()
+        motionObj.stiffnessOff()
         root.update()
-        motionObj.relax()
         #self.update()
         pass
 
