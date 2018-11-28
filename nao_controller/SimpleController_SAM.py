@@ -205,7 +205,7 @@ class SimpleController:
 				text = "Rest",
 				background = "red",
 				foreground = "black",
-				command = lambda : self.wrapper(motionObj.rest()))
+				command = lambda : self.wrapper(motionObj.stiffnessOff(motionObj)))
 		restButton.pack()
 
 		'''
@@ -261,7 +261,7 @@ class SimpleController:
 				foreground = "white",
 				command = lambda : self.wrapper( motionObj.kneelPosture() )).pack()
 		Button(   frame,
-				text = "get angles",
+				text = "getAngles",
 				background = "red",
 				foreground = "black",
 				# command = lambda : self.wrapper( visionObj.targetDetection(  ))).pack()
