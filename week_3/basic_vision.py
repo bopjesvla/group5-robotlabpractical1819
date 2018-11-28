@@ -7,7 +7,7 @@ from naoqi import ALProxy
 from PIL import Image
 import vision_definitions
 
-ip = '192.168.1.145'
+ip = '192.168.1.144'
 port = 9559
 
 resolution = vision_definitions.kVGA#kVGA #kQVGA  # QQVGA (160 * 120)
@@ -35,4 +35,4 @@ def takePicture(theName):
     # can be removed for png, but if it malfunctions, just use 'realPicture.save("filename.type", "TYPE").
     realPicture.show()
 
-takePicture('analyzeTheName.png')
+takePicture('ballpic.png')
