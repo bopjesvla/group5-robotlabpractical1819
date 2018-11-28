@@ -32,6 +32,7 @@ from PIL import Image, ImageTk
 import math
 import numpy as np
 from SimpleMotions import SimpleMotions
+from Tkinter import Tk, Label
 
 #global visionProxy
 #resolution = 2    # VGA
@@ -44,16 +45,19 @@ class SimpleVisions:
     def __init__(self):
         self.visionProxy = ALProxy("ALVideoDevice", Config.ROBOT_IP, Config.PORT)
         self.motionProxy = ALProxy("ALMotion", Config.ROBOT_IP, Config.PORT)
+        # rootImage = Tk()
+        # img = Image.open("terminated.png")
+        # tkimage = ImageTk.PhotoImage(img)
+        # self.panel = Label(rootImage, image=tkimage)
+        # self.panel.pack()
+        # rootImage.mainloop()
         pass
 
     def showImage(self, img):
-        rootImage = Tk()
-        img = Image.open("analyzeThis.png")
-        tkimage = ImageTk.PhotoImage(img)
-        Label(rootImage, image=tkimage).pack()
-        rootImage.mainloop()
+        img = Image.open("terminated.png")
+        self.panel.configure(image=img)
 
-    def terminator(self):
+    def terminator(self, panel, root):
         #motionObj.moveHeadPitch(0.3, 0.4)
         #time.sleep(2)
         videoClient = self.visionProxy.subscribeCamera("python_client", 0, resolution, colorSpace, 5)
@@ -81,8 +85,8 @@ class SimpleVisions:
             m[b-1:b+1,l:r,:] = 255
             realPicture = Image.fromarray(m)
 
-            from PIL import ImageFont
-            from PIL import ImageDraw
+        from PIL import ImageFont
+        from PIL import ImageDraw
 
         if len(faces) > 0:
             draw = ImageDraw.Draw(realPicture)
@@ -91,13 +95,16 @@ class SimpleVisions:
             text = 't: {}\nb: {}\nr: {}\nl: {}'.format(t, b, r, l)
             draw.text((10, 10),text,(0,0,0))
 
-        # r, g, b = realPicture.split()
-        # r = r.point(lambda i: i * 1.5)
-        # g = g.point(lambda i: i / 1.5)
-        # b = b.point(lambda i: i / 1.5)
-        # realPicture = Image.merge('RGB', (r,g,b))
+        r, g, b = realPicture.split()
+        r = r.point(lambda i: i * 1.5)
+        g = g.point(lambda i: i / 1.5)
+        b = b.point(lambda i: i / 1.5)
+        realPicture = Image.merge('RGB', (r,g,b))
         realPicture.save("terminated.png", "PNG")
-        realPicture.show()
+        tkimage = ImageTk.PhotoImage(realPicture)
+        panel.configure(image=tkimage)
+        root.update()
+        # realPicture.show()
 
         return faces
 

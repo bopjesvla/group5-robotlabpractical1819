@@ -17,6 +17,7 @@
 
 import numpy as np
 from Tkinter import *
+from PIL import Image, ImageTk
 from Config import Config
 from SimpleMotions import SimpleMotions
 from SimpleVisions import SimpleVisions
@@ -30,7 +31,8 @@ if Config.LINUX:
 root = Tk()
 root.wm_title("Simple NAO Controller v1.1")
 root.configure(background="white")
-frame = Frame(root, width=Config.FRAMEWIDTH, height=Config.FRAMEHEIGHT)
+frame = Frame(root, width=Config.FRAMEWIDTH // 2, height=Config.FRAMEHEIGHT)
+frame2 = Frame(root, width=Config.FRAMEWIDTH // 2, height=Config.FRAMEHEIGHT)
 motionObj = SimpleMotions()
 visionObj = SimpleVisions()
 soundObj = SimpleSounds("SpeechRecognition")
@@ -45,7 +47,16 @@ class SimpleController:
     def __init__(self):
         frame.pack_propagate(0)
         self.createButtons()
-        frame.pack()
+        frame.pack(side='left')
+
+        img = Image.open("terminated.png")
+        tkimage = ImageTk.PhotoImage(img)
+        self.panel = Label(frame2, image=tkimage)
+        self.panel.pack()
+        # self.panel.pack()
+
+        frame2.pack(side='left')
+
         root.after(loopDelay, self.passiveLoop)
         root.mainloop()
         pass
@@ -187,10 +198,10 @@ class SimpleController:
 
         def terminate():
             eyesObj.redEyes()
-            loc = None
+            loc = []
 
-            while not loc:
-                loc = visionObj.terminator()
+            while len(loc) < 1:
+                loc = visionObj.terminator(self.panel, root)
 
             soundObj.speak("hasta la vista baby")
             eyesObj.blueEyes()
@@ -247,7 +258,53 @@ class SimpleController:
                 command = lambda : self.wrapper( motionObj.handDown(  ))).pack()
           
 
-        
+        arrivalButton = Button(frame,
+        text="Arrival",
+        background="green",
+        foreground="black",
+        command=lambda: self.wrapper(arrival()))
+        arrivalButton.pack()
+
+        def arrival():
+            #Step1: Eyes off
+            eyesObj.noEyes()
+
+            #Step2: Kneel
+
+            #Step3: Thunder sound
+            #soundObj.speak("THUNDER") #Replace me with real code
+
+            #Step4: Stand up from Kneeling
+
+            #Step5: Level Head to horizontal
+
+            #Step6: White eyes when head is level
+            eyesObj.whiteEyes()
+
+            #Step7 & Step8: Terminator vision until 3 faces found
+            faces = []
+
+            #facePositions = [100./2., 100./2., 100.*-2., 100./-2., 100./-2.]
+            facePositions = [-100, -60, -20, 20, 60, 100]
+            while len(faces) < 3:
+                for p in facePositions:
+                    faces = visionObj.terminator()
+                    motionObj.moveHeadYaw(np.radians(p),0.1)
+
+
+                    #Step9: Points to center face and speaks
+            # faces.sort()
+            (x, y, w, h) = faces[1]
+            cx = x + w / 2.
+            cy = y + h / 2.
+            #Rotate head to look at center
+            rotateX = -((cx / 640.) - 0.5) * 60.97
+            rotateY = ((cy / 480.) - 0.5) * np.radians(47.64)
+            rotateX = rotateX // 10 * 10
+            motionObj.rotateTheta(rotateX)
+            motionObj.moveHeadPitch(rotateY, 0.5)
+            soundObj.speak("Start process: Acquiring apparel")
+
 
     def makeXEntry(self):
         self.moveX = Entry(frame)
