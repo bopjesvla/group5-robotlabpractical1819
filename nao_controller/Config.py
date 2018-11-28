@@ -44,7 +44,7 @@ class Config:
     RAD2DEG = 180.0/math.pi # Convert Rad to Deg
 
     # Interface things
-    FRAMEWIDTH = 300
+    FRAMEWIDTH = 1200
     FRAMEHEIGHT = 800
 
     # Movement
