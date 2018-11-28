@@ -268,7 +268,25 @@ class SimpleController:
         arrivalButton.pack()
 
         def arrival():
-            
+            #Step1: Eyes off
+            eyesObj.noEyes()
+
+            #Step2: Kneel
+            motionObj.kneelPosture()
+
+            #Step3: Thunder sound
+            audioObj.playThunder() #Replace me with real code
+
+            #Step4: Stand up from Kneeling
+            motionObj.Crouch()
+            motionObj.stand()
+
+            #Step5: Level Head to horizontal
+            motionObj.moveHeadPitch(-.3, 1)
+
+            #Step6: White eyes when head is level
+            eyesObj.whiteEyes()
+
             #Step7 & Step8: Terminator vision until 3 faces found
             faces = []
 

@@ -116,10 +116,21 @@ class SimpleVisions:
         haar_face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
         for n in range(0, 5):
-            # try:
-            print 'loop',n
-            faces = self.terminator(panel, root)
-            print faces
+            # print 'loop',n
+            # videoClient = self.visionProxy.subscribeCamera("python_client", 0, resolution, colorSpace, 5)
+            # self.visionProxy.setCameraParameter(videoClient, 18, 0)
+            # picture = self.visionProxy.getImageRemote(videoClient)
+            # self.visionProxy.unsubscribe(videoClient)
+            # picWidth = picture[0]
+            # picHeight = picture[1]
+            # array = picture[6]
+            # realPicture = Image.frombytes("RGB", (picWidth, picHeight), array)
+            # realPicture.save('image_{}.png'.format(n), "PNG")
+
+            # image = cv2.imread('image_{}.png'.format(n))
+            # faces = haar_face_cascade.detectMultiScale(image, minNeighbors=5); 
+            # faces = self.terminator(panel, root)
+            # print faces
             if len(faces)>0:
                 if len(faces) > 3:
                     return_faces = faces
