@@ -108,9 +108,8 @@ class SimpleVisions:
 
         return faces
 
-    def faceFollow(self, motionObj, soundObj):
+    def faceFollow(self, motionObj, soundObj, panel, root, stopDist=100, wave=False):
         print 'face follow'
-        stopDist = 100 # in cm
         cams = self.visionProxy.getSubscribers()
         for cam in cams:
             self.visionProxy.unsubscribe(cam)
@@ -119,21 +118,12 @@ class SimpleVisions:
         for n in range(0, 5):
             # try:
             print 'loop',n
-            videoClient = self.visionProxy.subscribeCamera("python_client", 0, resolution, colorSpace, 5)
-            self.visionProxy.setCameraParameter(videoClient, 18, 0)
-            picture = self.visionProxy.getImageRemote(videoClient)
-            self.visionProxy.unsubscribe(videoClient)
-            picWidth = picture[0]
-            picHeight = picture[1]
-            array = picture[6]
-            realPicture = Image.frombytes("RGB", (picWidth, picHeight), array)
-            realPicture.save('image_{}.png'.format(n), "PNG")
-
-            image = cv2.imread('image_{}.png'.format(n))
-            faces = haar_face_cascade.detectMultiScale(image, minNeighbors=5); 
+            faces = self.terminator(panel, root)
             print faces
             if len(faces)>0:
-                soundObj.speak('face found')
+                if len(faces) > 3:
+                    return_faces = faces
+                # soundObj.speak('face found')
                 scale = 0
                 (x, y, w, h) = faces[0]
                 cx = x + w/2.
@@ -160,9 +150,11 @@ class SimpleVisions:
             #     print e
                 # self.visionProxy.unsubscribe(videoClient)
         print "done"
-        soundObj.speak('Hi')
-        motionObj.waveArm()
+        if wave:
+            soundObj.speak('Hi')
+            motionObj.waveArm()
 
+        # return return_faces
         pass
     
     def targetDetection(self):
@@ -170,76 +162,76 @@ class SimpleVisions:
         for cam in cams:
             self.visionProxy.unsubscribe(cam)
 
-        for n in range(0, 5):
-            video = True
-            balldetect = True
-            print 'loop',n
-            realPicture = None
-            if(video):
-                videoClient = self.visionProxy.subscribeCamera("python_client", 0, resolution, colorSpace, 5)
-                self.visionProxy.setCameraParameter(videoClient, 18, 0)
-                picture = self.visionProxy.getImageRemote(videoClient)
-                self.visionProxy.unsubscribe(videoClient)
-                picWidth = picture[0]
-                picHeight = picture[1]
-                array = picture[6]
-                realPicture = Image.frombytes("RGB", (picWidth, picHeight), array)
-                realPicture.save('save_{}.png'.format(n), "PNG")
+        # for n in range(0, 5):
+        n=0
+        video = True
+        balldetect = True
+        print 'loop',n
+        realPicture = None
+        if(video):
+            videoClient = self.visionProxy.subscribeCamera("python_client", 0, resolution, colorSpace, 5)
+            self.visionProxy.setCameraParameter(videoClient, 18, 0)
+            picture = self.visionProxy.getImageRemote(videoClient)
+            self.visionProxy.unsubscribe(videoClient)
+            picWidth = picture[0]
+            picHeight = picture[1]
+            array = picture[6]
+            realPicture = Image.frombytes("RGB", (picWidth, picHeight), array)
+            # realPicture.save('save_{}.png'.format(n), "PNG")
             # realPicture.show()
 
-            # TODO: first debug the above part
+        
+        if(balldetect):
+            image = np.array(realPicture)
+            # image = cv2.imread("save_3.png")
+
+            # image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+            # image = Image.fromarray(image)
+            # image.show()
+
+            lower_green = np.array([36,100,100], dtype = np.uint8)
+            upper_green = np.array([86,255,255], dtype=np.uint8)
+
+            #convert to a hsv colorspace
+            hsvImage = cv2.cvtColor(image,cv2.COLOR_BGR2HSV)
+
+            #Create a treshold mask
+            color_mask=cv2.inRange(hsvImage,lower_green,upper_green)
+
+            #apply the mask on the image
+            green_image = cv2.bitwise_and(image,image,mask=color_mask)
+
+            kernel=np.ones((9,9),np.uint8)
+            #Remove small objects
+            opening =cv2.morphologyEx(color_mask,cv2.MORPH_OPEN,kernel)
+            #Close small openings
+            closing = cv2.morphologyEx(opening, cv2.MORPH_CLOSE, kernel)
+            #Apply a blur to smooth the edges
+            smoothed_mask = cv2.GaussianBlur(closing, (9,9),0)
+
+            #Apply our (smoothend and denoised) mask
+            #to our original image to get everything that is blue.
+            green_image = cv2.bitwise_and(image,image,mask=smoothed_mask)
+
+            #Get the grayscale image (last channel of the HSV image
+            gray_image = green_image[:,:,2]
+
+            #Use a hough transform to find circular objects in the image.
+            circles = cv2.HoughCircles(
+                gray_image,             #Input image to perform the transformation on
+                cv2.HOUGH_GRADIENT,     #Method of detection
+                1,                      #Ignore this one
+                50,                      #Min pixel dist between centers of detected circles
+                param1=200,             #Ignore this one as well
+                param2=20,              #Accumulator threshold: smaller = the more (false) circles
+                minRadius=5,            #Minimum circle radius
+                maxRadius=100)          #Maximum circle radius
             
-            if(balldetect):
-                image = np.array(realPicture)
-                # image = cv2.imread("save_3.png")
-
-                # image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-                # image = Image.fromarray(image)
-                # image.show()
-
-                lower_green = np.array([36,100,100], dtype = np.uint8)
-                upper_green = np.array([86,255,255], dtype=np.uint8)
-
-                #convert to a hsv colorspace
-                hsvImage = cv2.cvtColor(image,cv2.COLOR_BGR2HSV)
-
-                #Create a treshold mask
-                color_mask=cv2.inRange(hsvImage,lower_green,upper_green)
-
-                #apply the mask on the image
-                green_image = cv2.bitwise_and(image,image,mask=color_mask)
-
-                kernel=np.ones((9,9),np.uint8)
-                #Remove small objects
-                opening =cv2.morphologyEx(color_mask,cv2.MORPH_OPEN,kernel)
-                #Close small openings
-                closing = cv2.morphologyEx(opening, cv2.MORPH_CLOSE, kernel)
-                #Apply a blur to smooth the edges
-                smoothed_mask = cv2.GaussianBlur(closing, (9,9),0)
-
-                #Apply our (smoothend and denoised) mask
-                #to our original image to get everything that is blue.
-                green_image = cv2.bitwise_and(image,image,mask=smoothed_mask)
-
-                #Get the grayscale image (last channel of the HSV image
-                gray_image = green_image[:,:,2]
-
-                #Use a hough transform to find circular objects in the image.
-                circles = cv2.HoughCircles(
-                    gray_image,             #Input image to perform the transformation on
-                    cv2.HOUGH_GRADIENT,     #Method of detection
-                    1,                      #Ignore this one
-                    50,                      #Min pixel dist between centers of detected circles
-                    param1=200,             #Ignore this one as well
-                    param2=20,              #Accumulator threshold: smaller = the more (false) circles
-                    minRadius=5,            #Minimum circle radius
-                    maxRadius=100)          #Maximum circle radius
-                
-                if circles is not None:
-                    # print(circles)
-                    # for x, y, r in circles[0]:
-                    #     cv2.circle(image, (x, y), r, (255, 255, 0), 5)
-                    return circles[0]
-                # imagePil = Image.fromarray(image)
-                # imagePil.save('balldect_{}.png'.format(n), "PNG")
-                # imagePil.show()
+            if circles is not None:
+                # print(circles)
+                # for x, y, r in circles[0]:
+                #     cv2.circle(image, (x, y), r, (255, 255, 0), 5)
+                return circles[0][0]
+            # imagePil = Image.fromarray(image)
+            # imagePil.save('balldect_{}.png'.format(n), "PNG")
+            # imagePil.show()

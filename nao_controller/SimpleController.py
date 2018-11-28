@@ -195,7 +195,7 @@ class SimpleController:
                 text = "2. Face Follow",
                 background = "red",
                 foreground = "black",
-                command = lambda : self.wrapper( visionObj.faceFollow( motionObj , soundObj )))
+                command = lambda : self.wrapper( visionObj.faceFollow( motionObj , soundObj, self.panel, root )))
         btnFaceFollow.pack()
 
         def terminate():
@@ -268,53 +268,49 @@ class SimpleController:
         arrivalButton.pack()
 
         def arrival():
-            #Step1: Eyes off
-            eyesObj.noEyes()
-
-            #Step2: Kneel
-            motionObj.kneelPosture()
-
-            #Step3: Thunder sound
-            audioObj.playThunder() #Replace me with real code
-
-            #Step4: Stand up from Kneeling
-            motionObj.Crouch()
-            motionObj.stand()
-
-            #Step5: Level Head to horizontal
-            motionObj.moveHeadPitch(-.3, 1)
-
-            #Step6: White eyes when head is level
-            eyesObj.whiteEyes()
-
+            
             #Step7 & Step8: Terminator vision until 3 faces found
             faces = []
 
             #facePositions = [100./2., 100./2., 100.*-2., 100./-2., 100./-2.]
             facePositions = [-40, -20, 0, 20, 40]
-            while True:
+            while len(faces) < 3:
                 for p in facePositions:
                     faces = visionObj.terminator(self.panel, root)
                     if len(faces) > 2:
                         break
                     motionObj.moveHeadYaw(np.radians(p),0.1)
 
-            x, y, r = visionObj.targetDetection()
-
-            #Step9: Points to center face and speaks
-            # faces.sort()
-            (x, y, w, h) = faces[1]
-            cx = x + w / 2.
-            cy = y + h / 2.
-            #Rotate head to look at center
-            rotateX = -((cx / 640.) - 0.5) * 60.97
-            rotateY = ((cy / 480.) - 0.5) * np.radians(47.64)
-            rotateX = rotateX // 10 * 10
-            motionObj.rotateTheta(rotateX)
-            # motionObj.moveHeadPitch(rotateY, 0.5)
+            # #Step9: Points to center face and speaks
+            # # faces.sort()
+            # (x, y, w, h) = faces[1]
+            # cx = x + w / 2.
+            # cy = y + h / 2.
+            # #Rotate head to look at center
+            # rotateX = -((cx / 640.) - 0.5) * 60.97
+            # rotateY = ((cy / 480.) - 0.5) * np.radians(47.64)
+            # rotateX = rotateX // 10 * 10
+            # motionObj.rotateTheta(rotateX)
+            # # motionObj.moveHeadPitch(rotateY, 0.5)
 
             motionObj.point()
             soundObj.speak("Start process: Acquiring apparel")
+
+        def clothing(self):
+            visionObj.faceFollow(motionObj, soundObj, self.panel, root)
+            facePositions = [-40, -20, 0, 20, 40]
+            x = y = r = -1
+            while x < 0:
+                for p in facePositions:
+                    result = visionObj.targetDetection()
+                    if not result is None:
+                        soundObj.speak("match")
+                        x, y, r = result
+                        break
+                    else:
+                        soundObj.speak("not a match")
+                    motionObj.moveHeadYaw(np.radians(p),0.1)
+            
 
 
     def makeXEntry(self):
@@ -369,7 +365,7 @@ class SimpleController:
     def wrapper(self, func):
         func
         motionObj.sit()
-        motionObj.stiffnessOff()
+        motionObj.stiffnessOff(motionObj.motionProxy)
         root.update()
         #self.update()
         pass

@@ -31,7 +31,7 @@ class Config:
     if LINUX and os.getlogin() == 'bob':
         ROBOT_IP = 'localhost'
     else:
-        ROBOT_IP = '192.168.1.144'
+        ROBOT_IP = '192.168.1.104'
 
     # Connection
     PORT = 9559
