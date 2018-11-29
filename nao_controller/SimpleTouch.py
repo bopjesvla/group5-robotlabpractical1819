@@ -48,11 +48,14 @@ class SimpleTouch:
         return lst[8][1]
 
     def oof(self):
+        # HeadTouch = False
         lst = self.touchProxy.getStatus()
         if any('Head' in name and s for name, s, _ in lst):
             return "ouch"
         if any('Foot' in name and s for name, s, _ in lst):
             return "oof"
+        if any('Hand' in name and s for name, s, _ in lst):
+            return 'reset'
 
     def task3(self, soundObj, motionObj):
         global touchStatus

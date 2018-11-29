@@ -454,12 +454,7 @@ class SimpleMotions:
                                      [[0.5],    [0.6],      [0.6],       [0.6]], True)
         #self.normalPose(True)
 
-    def getAngles(self):
-        names = ['LHipYawPitch', 'RHipYawPitch', 'RHipRoll', 'RHipPitch', 'RKneePitch', 'RAnklePitch', 'RAnkleRoll', 
-                    'LHipRoll', 'LHipPitch', 'LKneePitch', 'LAnklePitch', 'LAnkleRoll']
-        angles = self.motionProxy.getAngles(names, False)
-        print(names)
-        print(angles)
+    
 
     def handDown(self):
         self.motionProxy.angleInterpolationWithSpeed(['LShoulderRoll', 'LShoulderPitch', 'LElbowRoll', 'LElbowYaw', 'LWristYaw'], [0.18541915714740753, 1.4723570346832275, -0.4103873670101166, -1.1937023401260376, 0.09999998658895493], 0.5)
@@ -477,15 +472,22 @@ class SimpleMotions:
         otherAng = [-0.08594608306884766, 0.32669997215270996, 0.05824995040893555, -0.09361600875854492, 1.0768260955810547, 1.089181900024414, -0.08893013000488281, 0.03685808181762695, -0.7317600250244141, 1.081428050994873, -0.3528618812561035, 0.3251659870147705]
         self.motionProxy.angleInterpolationWithSpeed(otherNames, otherAng, 0.1)
 
+    def getAngles(self):
+        names = ['LHipYawPitch', 'RHipYawPitch', 'RHipRoll', 'RHipPitch', 'RKneePitch', 'RAnklePitch', 'RAnkleRoll', 
+                    'LHipRoll', 'LHipPitch', 'LKneePitch', 'LAnklePitch', 'LAnkleRoll']
+        angles = self.motionProxy.getAngles(names, False)
+        print(names)
+        print(angles)
+
     def kneelPosture(self):
         self.Crouch()
 
-        legNames = ['LHipYawPitch', 'RHipYawPitch', 'RHipRoll', 'RHipPitch', 'RKneePitch', 'RAnklePitch', 'RAnkleRoll', 
-                    'LHipRoll', 'LHipPitch', 'LKneePitch', 'LAnklePitch', 'LAnkleRoll']
-        legAngles = [-0.21778607368469238, -0.21778607368469238, 0.08748006820678711, -0.7332940101623535, 2.112546443939209, 
-        -1.186300277709961, -0.07586973160505295, -0.08432793617248535, -1.221022129058838, 2.112546443939209, -0.7378959655761719, 
-        0.12429594993591309]
-        self.motionProxy.angleInterpolationWithSpeed(legNames, legAngles, 0.1)
+        # legNames = ['LHipYawPitch', 'RHipYawPitch', 'RHipRoll', 'RHipPitch', 'RKneePitch', 'RAnklePitch', 'RAnkleRoll', 
+        #             'LHipRoll', 'LHipPitch', 'LKneePitch', 'LAnklePitch', 'LAnkleRoll']
+        # legAngles = [-0.21778607368469238, -0.21778607368469238, 0.08748006820678711, -0.7332940101623535, 2.112546443939209, 
+        # -1.186300277709961, -0.07586973160505295, -0.08432793617248535, -1.221022129058838, 2.112546443939209, -0.7378959655761719, 
+        # 0.12429594993591309]
+        # self.motionProxy.angleInterpolationWithSpeed(legNames, legAngles, 0.1)
 
         hipNames = ['LHipYawPitch', 'RHipYawPitch', 'LHipRoll', 'RHipRoll', 'LHipPitch', 'RHipPitch']
         hipAngles =  [-0.23926210403442383, -0.23926210403442383, -0.12267804145812988, 0.11969399452209473, -0.9924559593200684, -0.9940738677978516]
@@ -496,6 +498,7 @@ class SimpleMotions:
         armAndHeadAngles = [0.01683211326599121, 0.5117790102958679, -0.2516179084777832, -0.0031099319458007812, 1.309994101524353, 1.3162140846252441, 
         -1.383626103401184, 0.9327139854431152, -0.7394299507141113, 0.9617760181427002, 0.18864011764526367, -0.03992605209350586]
         self.motionProxy.angleInterpolationWithSpeed(armAndHeadNames, armAndHeadAngles, 0.1)
+
         print 'done kneeling'
 
         # time.sleep(3)
@@ -505,4 +508,7 @@ class SimpleMotions:
 
     def Crouch(self):
         self.postureProxy.goToPosture("Crouch", 0.2)
+
+    def centerHead(self):
+        self.motionProxy.angleInterpolationWithSpeed(["HeadPitch", "HeadYaw"], [0.0, 0.0], 0.2)
 

@@ -37,3 +37,7 @@ class SimpleAudio():
     def playThunder(self):
         fileId = self.aup.loadFile("/home/nao/thunder3.wav")
         self.aup.play(fileId)
+
+    def playBoo(self):
+        fileId = self.aup.loadFile("/home/nao/boo.wav")
+        self.aup.play(fileId)

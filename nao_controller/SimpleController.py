@@ -16,6 +16,7 @@
 '''
 
 import numpy as np
+import time
 from Tkinter import *
 from PIL import Image, ImageTk
 from Config import Config
@@ -47,6 +48,7 @@ loopDelay = 100
 
 class SimpleController:
     def __init__(self):
+        self.endIsNear = True
         frame.pack_propagate(0)
         self.createButtons()
         frame.pack(side='left')
@@ -65,10 +67,14 @@ class SimpleController:
 
     def passiveLoop(self):
         # touchObj.task3(soundObj, motionObj)
-        say = touchObj.oof()
-        if say:
-            soundObj.speak(say)
-        soundObj.checkSpeech()
+        if(self.endIsNear):
+            say = touchObj.oof()
+            if say == 'reset':
+                soundObj.speak('that went well')
+                # motionObj.backToCenter()
+            elif say:
+                soundObj.speak(say)
+            soundObj.checkSpeech()
         root.after(loopDelay, self.passiveLoop)
 
     def createButtons(self):
@@ -219,7 +225,7 @@ class SimpleController:
                 text = "Rest",
                 background = "red",
                 foreground = "black",
-                command = lambda : self.wrapper(motionObj.rest())).pack()
+                command = lambda : self.wrapper(self.rest2())).pack()
 
         '''
         btnSP = Button(   frame,
@@ -246,18 +252,18 @@ class SimpleController:
         # week4t1.pack()
 
         Button(   frame,
-                text = "Arrival 9",
+                text = "getAngles",
                 background = "red",
                 foreground = "black",
                 # command = lambda : self.wrapper( audioObj.playThunder(  ))).pack()
-                command = lambda : self.wrapper( self.arrival_9() )).pack()
+                command = lambda : self.wrapper( motionObj.getAngles() )).pack()
         
         Button(   frame,
-                text = "down",
+                text = "kneelPosture",
                 background = "red",
                 foreground = "black",
                 # command = lambda : self.wrapper( audioObj.playThunder(  ))).pack()
-                command = lambda : self.wrapper( motionObj.handDown(  ))).pack()
+                command = lambda : self.wrapper( motionObj.kneelPosture(  ))).pack()
           
 
         arrivalButton = Button(frame,
@@ -266,6 +272,19 @@ class SimpleController:
         foreground="black",
         command=lambda: self.wrapper(arrival()))
         arrivalButton.pack()
+
+        cutButton = Button(frame,
+        text="Cut",
+        background="green",
+        foreground="black",
+        command=lambda: self.wrapper(cut()))
+        cutButton.pack()
+
+        Button(frame,
+        text="Clothing",
+        background="blue",
+        foreground="white",
+        command=lambda: self.wrapper(clothing())).pack()
 
         def arrival():
             #Step1: Eyes off
@@ -292,43 +311,72 @@ class SimpleController:
 
             #facePositions = [100./2., 100./2., 100.*-2., 100./-2., 100./-2.]
             facePositions = [-40, -20, 0, 20, 40]
-            while len(faces) < 3:
+            while len(faces) < 1:
                 for p in facePositions:
                     faces = visionObj.terminator(self.panel, root)
-                    if len(faces) > 2:
+                    if len(faces) > 0:
                         break
                     motionObj.moveHeadYaw(np.radians(p),0.1)
+                    time.sleep(1)
 
-            # #Step9: Points to center face and speaks
-            # # faces.sort()
-            # (x, y, w, h) = faces[1]
-            # cx = x + w / 2.
-            # cy = y + h / 2.
-            # #Rotate head to look at center
-            # rotateX = -((cx / 640.) - 0.5) * 60.97
-            # rotateY = ((cy / 480.) - 0.5) * np.radians(47.64)
-            # rotateX = rotateX // 10 * 10
-            # motionObj.rotateTheta(rotateX)
-            # # motionObj.moveHeadPitch(rotateY, 0.5)
+            #Step9: Points to center face and speaks
+            # faces.sort()
+            (x, y, w, h) = faces[0]
+            cx = x + w / 2.
+            cy = y + h / 2.
+            #Rotate head to look at center
+            rotateX = -((cx / 640.) - 0.5) * 60.97
+            rotateY = ((cy / 480.) - 0.5) * np.radians(47.64)
+            rotateX = rotateX // 10 * 10
+            motionObj.rotateTheta(rotateX)
+            motionObj.moveHeadPitch(rotateY, 0.5)
 
+            # motionObj.centerHead()
+            print "head centering done"
             motionObj.point()
             soundObj.speak("Start process: Acquiring apparel")
+            motionObj.handDown()
 
-        def clothing(self):
-            visionObj.faceFollow(motionObj, soundObj, self.panel, root)
+        def clothing_8():
+			eyesObj.redEyes()
+			soundObj.speak("I need your clothes, your boots and your motorcycle.")
+
+        def clothing():
+            print 'clothing'
+            
+            # return 0
+            #==========================================
+
+            print 'face follow'
+            faces = visionObj.faceFollow(motionObj, soundObj, self.panel, root)
+            print faces
+            # TODO: do the calc to get turning angles from detected faces
+            # return 0
+
+            print 'target detection'
             facePositions = [-40, -20, 0, 20, 40]
             x = y = r = -1
             while x < 0:
                 for p in facePositions:
                     result = visionObj.targetDetection()
                     if not result is None:
+                        # TODO: "Not a match" on terminator vision
                         soundObj.speak("match")
                         x, y, r = result
+                        print result
+                        # TODO: center on the target
+                        clothing_8()
                         break
                     else:
+                        # TODO: "Not a match" on terminator vision
                         soundObj.speak("not a match")
+                        # audioObj.playBoo()
                     motionObj.moveHeadYaw(np.radians(p),0.1)
-            
+            # soundObj.speak('clothing done')
+
+        def cut():
+            soundObj.speak('that went well')
+
 
 
     def makeXEntry(self):
@@ -380,10 +428,14 @@ class SimpleController:
         self.valSR.insert(0, "1.0")
         pass
 
-    def wrapper(self, func):
-        func
+    def rest2(self):
         motionObj.sit()
         motionObj.stiffnessOff(motionObj.motionProxy)
+        
+    def wrapper(self, func):
+        func
+        # motionObj.sit()
+        # motionObj.stiffnessOff(motionObj.motionProxy)
         root.update()
         #self.update()
         pass
