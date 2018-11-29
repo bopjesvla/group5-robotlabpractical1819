@@ -53,7 +53,7 @@ class SimpleController:
         self.createButtons()
         frame.pack(side='left')
 
-        img = Image.open("terminated.png")
+        img = Image.open("analyzeThis.png")
         tkimage = ImageTk.PhotoImage(img)
         self.panel = Label(frame2, image=tkimage)
         self.panel.pack()
@@ -209,7 +209,7 @@ class SimpleController:
             loc = []
 
             while len(loc) < 1:
-                loc = visionObj.terminator(self.panel, root)
+                loc = visionObj.terminator(self.panel, root, True)
 
             soundObj.speak("hasta la vista baby")
             eyesObj.blueEyes()
@@ -287,6 +287,8 @@ class SimpleController:
         command=lambda: self.wrapper(clothing())).pack()
 
         def arrival():
+            motionObj.stand()
+            motionObj.rotateTheta(140)
             #Step1: Eyes off
             eyesObj.noEyes()
 
@@ -311,10 +313,10 @@ class SimpleController:
 
             #facePositions = [100./2., 100./2., 100.*-2., 100./-2., 100./-2.]
             facePositions = [-40, -20, 0, 20, 40]
-            while len(faces) < 1:
+            while len(faces) < 3:
                 for p in facePositions:
                     faces = visionObj.terminator(self.panel, root)
-                    if len(faces) > 0:
+                    if len(faces) > 2:
                         break
                     motionObj.moveHeadYaw(np.radians(p),0.1)
                     time.sleep(1)
@@ -354,7 +356,7 @@ class SimpleController:
             # return 0
 
             print 'target detection'
-            facePositions = [-40, -20, 0, 20, 40]
+            facePositions = [-60, -40, -20, 0, 20, 40, 60]
             x = y = r = -1
             while x < 0:
                 for p in facePositions:
@@ -366,16 +368,23 @@ class SimpleController:
                         print result
                         # TODO: center on the target
                         clothing_8()
+                        while True:
+                            say = touchObj.oof()
+                            visionObj.terminator(self.panel, root, say is not None)
                         break
                     else:
                         # TODO: "Not a match" on terminator vision
                         soundObj.speak("not a match")
-                        # audioObj.playBoo()
+                        audioObj.playBoo()
                     motionObj.moveHeadYaw(np.radians(p),0.1)
             # soundObj.speak('clothing done')
 
         def cut():
+            eyesObj.whiteEyes()
             soundObj.speak('that went well')
+            motionObj.rotateTheta(140)
+            motionObj.moveXYCm(120,0)
+            motionObj.Crouch()
 
 
 

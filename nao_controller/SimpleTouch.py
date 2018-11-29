@@ -54,8 +54,8 @@ class SimpleTouch:
             return "ouch"
         if any('Foot' in name and s for name, s, _ in lst):
             return "oof"
-        if any('Hand' in name and s for name, s, _ in lst):
-            return 'reset'
+        # if any('Hand' in name and s for name, s, _ in lst):
+        #     return 'reset'
 
     def task3(self, soundObj, motionObj):
         global touchStatus

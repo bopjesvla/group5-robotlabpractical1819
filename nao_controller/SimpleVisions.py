@@ -28,7 +28,8 @@ from naoqi import ALProxy
 
 import time
 # import Image
-from PIL import Image, ImageTk
+from PIL import Image, ImageTk, ImageOps
+# import PIL?
 import math
 import numpy as np
 from SimpleMotions import SimpleMotions
@@ -57,7 +58,7 @@ class SimpleVisions:
         img = Image.open("terminated.png")
         self.panel.configure(image=img)
 
-    def terminator(self, panel, root):
+    def terminator(self, panel, root, distort=False):
         #motionObj.moveHeadPitch(0.3, 0.4)
         #time.sleep(2)
         videoClient = self.visionProxy.subscribeCamera("python_client", 0, resolution, colorSpace, 5)
@@ -83,10 +84,15 @@ class SimpleVisions:
             m[t:b,r-1:r+1,:] = 255
             m[t-1:t+1,l:r,:] = 255
             m[b-1:b+1,l:r,:] = 255
-            realPicture = Image.fromarray(m)
 
         from PIL import ImageFont
         from PIL import ImageDraw
+
+        
+        if distort:
+            m = self.distortion(m)
+
+        realPicture = Image.fromarray(m)
 
         if len(faces) > 0:
             draw = ImageDraw.Draw(realPicture)
@@ -252,26 +258,18 @@ class SimpleVisions:
             # imagePil.show()
 
 
-    def distortion(self):
+    def distortion(self, img):
         # Distortion filter on camera
-        cams = self.visionProxy.getSubscribers()
-        for cam in cams:
-            self.visionProxy.unsubscribe(cam)
+        picWidth = img.shape[0]
+        picHeight = img.shape[1]
 
-        videoClient = self.visionProxy.subscribeCamera("python_client", 0, resolution, colorSpace, 5)
-        self.visionProxy.setCameraParameter(videoClient, 18, 0)
-        picture = self.visionProxy.getImageRemote(videoClient)
-        self.visionProxy.unsubscribe(videoClient)
-        picWidth = picture[0]
-        picHeight = picture[1]
-        array = picture[6]
-        realPicture = Image.frombytes("RGB", (picWidth, picHeight), array)
+        imageArr = img
+        A= picWidth / 3.0
+        W = 2.0/picHeight
 
-        imageArr = np.array(realPicture)
-        hsvImage = cv2.cvtColor(imageArr, cv2.COLOR_BGR2HSV)
-        smoothed_mask = cv2.GaussianBlur(hsvImage, (9, 9), 0)
+        shift = lambda x: A * np.sin(2.0*np.pi*x*W)
+        for i in range (picWidth):
+            imageArr[:,i] = np.roll(img[:,i], int (shift(i)))
 
-        imagePil = Image.fromarray(smoothed_mask)
-        imagePil.show()
-
-        self.visionProxy.unsubscribe(videoClient)
+        return imageArr
+        
