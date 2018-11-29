@@ -246,3 +246,28 @@ class SimpleVisions:
             # imagePil = Image.fromarray(image)
             # imagePil.save('balldect_{}.png'.format(n), "PNG")
             # imagePil.show()
+
+
+    def distortion(self):
+        # Distortion filter on camera
+        cams = self.visionProxy.getSubscribers()
+        for cam in cams:
+            self.visionProxy.unsubscribe(cam)
+
+        videoClient = self.visionProxy.subscribeCamera("python_client", 0, resolution, colorSpace, 5)
+        self.visionProxy.setCameraParameter(videoClient, 18, 0)
+        picture = self.visionProxy.getImageRemote(videoClient)
+        self.visionProxy.unsubscribe(videoClient)
+        picWidth = picture[0]
+        picHeight = picture[1]
+        array = picture[6]
+        realPicture = Image.frombytes("RGB", (picWidth, picHeight), array)
+
+        imageArr = np.array(realPicture)
+        hsvImage = cv2.cvtColor(imageArr, cv2.COLOR_BGR2HSV)
+        smoothed_mask = cv2.GaussianBlur(hsvImage, (9, 9), 0)
+
+        imagePil = Image.fromarray(smoothed_mask)
+        imagePil.show()
+
+        self.visionProxy.unsubscribe(videoClient)
