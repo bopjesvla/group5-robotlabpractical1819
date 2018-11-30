@@ -53,7 +53,7 @@ class SimpleController:
         self.createButtons()
         frame.pack(side='left')
 
-        img = Image.open("analyzeThis.png")
+        img = Image.open("terminated.png")
         tkimage = ImageTk.PhotoImage(img)
         self.panel = Label(frame2, image=tkimage)
         self.panel.pack()
@@ -209,7 +209,7 @@ class SimpleController:
             loc = []
 
             while len(loc) < 1:
-                loc = visionObj.terminator(self.panel, root, True)
+                loc = visionObj.terminator(self.panel, root, False)
 
             soundObj.speak("hasta la vista baby")
             eyesObj.blueEyes()

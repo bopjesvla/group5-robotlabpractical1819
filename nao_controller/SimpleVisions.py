@@ -138,7 +138,7 @@ class SimpleVisions:
             # image = cv2.imread('image_{}.png'.format(n))
             image = np.array(realPicture)
             faces = haar_face_cascade.detectMultiScale(image, minNeighbors=5); 
-            # faces = self.terminator(panel, root)
+            self.terminator(panel, root)
             # print faces
             if len(faces)>0:
                 if len(faces) > 3:
