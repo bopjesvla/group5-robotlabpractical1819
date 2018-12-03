@@ -30,56 +30,7 @@ import math
 
 memory = None
 SpeechRecog = None
-
-class SimpleASR():
-    def __init__(self):
-        self.asr = ALProxy("ALSpeechRecognition", Config.ROBOT_IP, Config.PORT)
-        self.memory = ALProxy("ALMemory", Config.ROBOT_IP, Config.PORT)
-
-    def unsubASR(self):
-        self.asr.unsubscribe("Test_ASR")
-        self.memory.unsubscribeToEvent("WordRecognized", "SpeechRecog")
-        print('unsub ASR')
-
-    def subASR(self):
-        self.asr.setLanguage("English")
-        self.vocabulary = ['action','stop', 'NO PROBLEMO', 'BITE ME', 'HASTA LA VISTA', 'CUT']
-        self.asr.setVocabulary(self.vocabulary, False)
-
-        self.memory.subscribeToEvent("WordRecognized", "SpeechRecog", "onTouched")
-        # memory.subscribeToEvent("ALSpeechRecognition/Status", "SpeechRecog", "status")
-        self.asr.subscribe("Test_ASR")
-
-    def onTouched(self, strVarName, value):
-        """ This will be called each time a touch
-        is detected.
-
-        """
-        # Unsubscribe to the event when talking,
-        # to avoid repetitions
-        self.memory.unsubscribeToEvent("WordRecognized", "SpeechRecog")
-
-        try:
-            print(value)
-            if value[0] in self.vocabulary and value[1]>0.5:
-                if value[0]=='action':
-                    self.tts.say('action receied. Lets start "come with me"')
-                # elif value[0]=='stop':
-                #     SpeechRecog.unsubASR()
-                else:
-                    self.tts.say(value[0])
-        except: 
-            pass
-        
-
-        # Subscribe again to the event
-        self.memory.subscribeToEvent("WordRecognized", "SpeechRecog", "onTouched")
-
-    def start(self):
-        print('start')
-
-    def done(self):
-        print('done')
+action_status = None
 
 class SpeechRecog(ALModule):
     """ A simple module able to react
@@ -87,11 +38,15 @@ class SpeechRecog(ALModule):
     """
     def __init__(self, name):
         ALModule.__init__(self, name)
+        am = ALProxy("ALAutonomousMoves")
+        am.setExpressiveListeningEnabled(False)
+        am.setBackgroundStrategy("none")
         self.subASR()
 
     def unsubASR(self):
         self.speechProxy.unsubscribe("Test_ASR")
         memory.unsubscribeToEvent("WordRecognized", "SpeechRecog")
+        
         print('unsub ASR')
 
     def subASR(self):
@@ -108,21 +63,6 @@ class SpeechRecog(ALModule):
         # memory.subscribeToEvent("ALSpeechRecognition/Status", "SpeechRecog", "status")
         self.speechProxy.subscribe("Test_ASR")
 
-    def status(self, strVarName, value):
-        """ This will be called each time a touch
-        is detected.
-
-        """
-        # Unsubscribe to the event when talking,
-        # to avoid repetitions
-        memory.unsubscribeToEvent("ALSpeechRecognition/Status", "SpeechRecog")
-
-        print(value)
-        
-
-        # Subscribe again to the event
-        memory.subscribeToEvent("ALSpeechRecognition/Status", "SpeechRecog", "status")
-
     def onTouched(self, strVarName, value):
         """ This will be called each time a touch
         is detected.
@@ -136,17 +76,27 @@ class SpeechRecog(ALModule):
             print(value)
             if value[0] in self.vocabulary and value[1]>0.5:
                 if value[0]=='action':
-                    self.tts.say('action receied. Lets start "come with me"')
+                    # self.tts.say('action receied. Lets start "come with me"')
+                    global action_status
+                    action_status = True
                 # elif value[0]=='stop':
                 #     SpeechRecog.unsubASR()
-                else:
-                    self.tts.say(value[0])
+                # else:
+                    # self.tts.say(value[0])
         except: 
             pass
         
 
         # Subscribe again to the event
         memory.subscribeToEvent("WordRecognized", "SpeechRecog", "onTouched")
+
+    def getActionStatus(self):
+        global action_status
+        return action_status
+
+    def setActionStatus(self, status=False):
+        global action_status
+        action_status = status
 
     def start(self):
         print('start')
@@ -166,10 +116,10 @@ def getASR():
 
     global SpeechRecog
     SpeechRecog = SpeechRecog("SpeechRecog")
-
     return SpeechRecog
 
 def stopASR():
     global SpeechRecog
     SpeechRecog.unsubASR()
     myBroker.shutdown()
+    # return None
