@@ -91,6 +91,9 @@ class SimpleSounds():
     def speak(self, word):
         self.talkProxy.say(word)
 
+    def speakParallel(self, word):
+        self.talkProxy.post.say(word)
+
     def playThunder(self):
         if self.soundset in self.audioPlayer.getLoadedSoundSetsList():
             print self.sounds

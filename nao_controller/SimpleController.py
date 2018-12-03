@@ -400,7 +400,10 @@ class SimpleController:
             command=lambda: self.wrapper(w5Start())).pack()
 
         def w5Start():
-            print 'w5 start'
+            '''The Nao is placed, standing in the middle of the room. About 1 meter next to the Nao,
+            facing the Nao, one actor is sitting on the floor. The director Nao is placed sitting nearby.
+            The director Nao yells ACTION!.'''
+
 
         # come with me
         Button(frame,
@@ -427,12 +430,16 @@ class SimpleController:
 
             # 6. At the same time the Nao says COME WITH ME IF YOU WANT TO LIVE. = Sameera
             # See the python files in the Gitlab repo for examples of running parallel processes on the Nao.
+            soundObj.speakParallel("COME WITH ME IF YOU WANT TO LIVE")
 
             # 7. The Nao goes back into standing position and walks 2 meters in a random direction.
 
             # 8. The Nao turns around and looks at the actor.
+            # use calculations
 
-            # 9. The Nao does a 'come here' gesture with its arm, while saying COME HERE SARAH CONNOR, NAO!.
+            # 9. The Nao does a 'come here' gesture with its arm, while saying COME HERE SARAH CONNOR, NAO!. = Sameera
+            soundObj.speakParallel("COME HERE SARAH CONNOR, NAO!")
+            motionObj.gestureCome()
 
             # 10. The actor stands up and walks towards the Nao
 
