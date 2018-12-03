@@ -75,3 +75,15 @@ class SimpleTouch:
                 motionObj.stand()
         else:
             pass
+
+    def w5HastaLaVista_T5(self, soundObj):
+        global touchStatus
+        global preTouchStatus
+        touchStatus = self.getHeadTouch()
+        if(touchStatus == True and preTouchStatus == False):
+            preTouchStatus = True
+        elif(touchStatus == False and preTouchStatus == True):
+            preTouchStatus = False
+            soundObj.speak("AFFIRMATIVE")
+        else:
+            pass

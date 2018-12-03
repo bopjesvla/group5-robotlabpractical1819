@@ -60,8 +60,8 @@ class SimpleSounds():
         self.response = False
         self.value = []
         self.name = name
-        self.spr = ALProxy("ALSpeechRecognition", Config.ROBOT_IP, Config.PORT)
-        self.spr.setVocabulary(['test', 'apple'], True)
+        # self.spr = ALProxy("ALSpeechRecognition", Config.ROBOT_IP, Config.PORT)
+        # self.spr.setVocabulary(['test', 'apple'], True)
 
         self.finished = True
         self.audioPlayer = ALProxy("ALAudioPlayer", Config.ROBOT_IP, Config.PORT)
@@ -81,12 +81,12 @@ class SimpleSounds():
         self.value = value
         print value
         memory.unsubscribeToEvent("LastWordRecognized", self.name)
-        self.spr.pause(True)
+        # self.spr.pause(True)
 
     def getSpeech(self, wordlist, wordspotting):
         self.response = False
         self.value = []
-        self.spr.setVocabulary(wordlist, wordspotting)
+        # self.spr.setVocabulary(wordlist, wordspotting)
 
     def speak(self, word):
         self.talkProxy.say(word)

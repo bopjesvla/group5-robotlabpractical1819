@@ -36,7 +36,7 @@ root.configure(background="white")
 frame = Frame(root, width=Config.FRAMEWIDTH // 2, height=Config.FRAMEHEIGHT)
 frame2 = Frame(root, width=Config.FRAMEWIDTH // 2, height=Config.FRAMEHEIGHT)
 
-debug = True
+debug = False
 
 if not debug:
     motionObj = SimpleMotions()
@@ -70,14 +70,17 @@ class SimpleController:
 
     def passiveLoop(self):
         # touchObj.task3(soundObj, motionObj)
-        if(self.endIsNear):
-            say = touchObj.oof()
-            if say == 'reset':
-                soundObj.speak('that went well')
-                # motionObj.backToCenter()
-            elif say:
-                soundObj.speak(say)
-            soundObj.checkSpeech()
+        # if(self.endIsNear):
+        #     say = touchObj.oof()
+        #     if say == 'reset':
+        #         soundObj.speak('that went well')
+        #         # motionObj.backToCenter()
+        #     elif say:
+        #         soundObj.speak(say)
+        #     soundObj.checkSpeech()
+
+        touchObj.w5HastaLaVista_T5(soundObj)
+        
         root.after(loopDelay, self.passiveLoop)
 
     def createButtons(self):
@@ -435,11 +438,11 @@ class SimpleController:
             # 7. The Nao goes back into standing position and walks 2 meters in a random direction.
 
             # 8. The Nao turns around and looks at the actor.
-            # use calculations
+            # use turn angles from (7) to turn the head - so Nao will directly look at the actor
 
             # 9. The Nao does a 'come here' gesture with its arm, while saying COME HERE SARAH CONNOR, NAO!. = Sameera
             soundObj.speakParallel("COME HERE SARAH CONNOR, NAO!")
-            motionObj.gestureCome()
+            # motionObj.gestureCome() # uncomment
 
             # 10. The actor stands up and walks towards the Nao
 
@@ -465,7 +468,7 @@ class SimpleController:
             # 4. The actor sits down facing the Nao.
 
             # 5. The actor touches the Nao's head sensor, the Nao says AFFIRMATIVE, enters parrot mode.
-
+            '''says AFFIRMATIVE > implemented in the passive loop '''
             # 6. Actor says NO PROBLEMO, Nao repeats.
 
             # 7. Actor says BITE ME, Nao repeats.

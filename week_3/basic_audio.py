@@ -8,7 +8,7 @@ import time
 from naoqi import ALProxy
 
 
-ip = '192.168.1.102'
+ip = '192.168.1.103'
 port = 9559
 
 # Creates a proxy on the speech-recognition module
@@ -17,7 +17,7 @@ speechProxy = ALProxy("ALSpeechRecognition", ip, port)
 speechProxy.setLanguage("English")
 
 # Example: Adds "yes", "no" and "please" to the vocabulary (without wordspotting)
-vocabulary = ['cookie', 'robot', 'yumyum']
+vocabulary = ['yes', 'no', 'please','cookie', 'robot', 'yumyum']
 speechProxy.setVocabulary(vocabulary, False)
 
 # Start the speech recognition engine with user Test_speechProxy
