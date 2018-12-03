@@ -45,7 +45,7 @@ class Config:
 
     # Interface things
     FRAMEWIDTH = 1200
-    FRAMEHEIGHT = 800
+    FRAMEHEIGHT = 700
 
     # Movement
     MAXSTEPSIZE = 8  # cm

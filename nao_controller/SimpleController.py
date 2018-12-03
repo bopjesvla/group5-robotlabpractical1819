@@ -35,14 +35,17 @@ root.wm_title("Simple NAO Controller v1.1")
 root.configure(background="white")
 frame = Frame(root, width=Config.FRAMEWIDTH // 2, height=Config.FRAMEHEIGHT)
 frame2 = Frame(root, width=Config.FRAMEWIDTH // 2, height=Config.FRAMEHEIGHT)
-motionObj = SimpleMotions()
-visionObj = SimpleVisions()
-soundObj = SimpleSounds("SpeechRecognition")
-soundObj.getSpeech(['test', 'apple'], True)
-eyesObj = SimpleEyes()
-audioObj = SimpleAudio()
 
-touchObj = SimpleTouch()
+debug = True
+
+if not debug:
+    motionObj = SimpleMotions()
+    visionObj = SimpleVisions()
+    soundObj = SimpleSounds("SpeechRecognition")
+    soundObj.getSpeech(['test', 'apple'], True)
+    eyesObj = SimpleEyes()
+    audioObj = SimpleAudio()
+    touchObj = SimpleTouch()
 
 loopDelay = 100
 
@@ -60,8 +63,8 @@ class SimpleController:
         # self.panel.pack()
 
         frame2.pack(side='left')
-
-        root.after(loopDelay, self.passiveLoop)
+        if not debug:
+            root.after(loopDelay, self.passiveLoop)
         root.mainloop()
         pass
 
@@ -90,7 +93,7 @@ class SimpleController:
                 background = "green",
                 foreground = "black",
                 command = lambda : self.wrapper(motionObj.sit())).pack()
-
+        '''
         randButton = Button(  frame,
                 text = "Random walk",
                 background = "green",
@@ -118,6 +121,7 @@ class SimpleController:
         rotateButton.pack()
 
         self.makeRotationThetaEntry()
+        '''
 
         stopButton = Button(    frame,
                 text = "STOP!",
@@ -153,7 +157,7 @@ class SimpleController:
 
         self.makeHeadPitchThetaEntry()
         self.makeHeadPitchSpeedEntry()
-
+        '''
         chillOutButton = Button(    frame,
                 text = "Chill Out",
                 background = "pink",
@@ -161,13 +165,13 @@ class SimpleController:
                 command = lambda : self.wrapper(motionObj.chillOut()))
         chillOutButton.pack()
 
-        # kickButton = Button(    frame,
-        #         text = "Kick Right",
-        #         background = "green",
-        #         foreground = "black",
-        #         command = lambda : self.wrapper(motionObj.sideLeftKick()))
-        # kickButton.pack()
-
+        kickButton = Button(    frame,
+                text = "Kick Right",
+                background = "green",
+                foreground = "black",
+                command = lambda : self.wrapper(motionObj.sideLeftKick()))
+        kickButton.pack()
+        
         week2 = Label(frame, text="----- Week 2 -----")
         week2.pack()
 
@@ -196,7 +200,7 @@ class SimpleController:
 
         week3t1 = Label(frame, text="1. Speech recognition")
         week3t1.pack()
-
+        '''
         btnFaceFollow = Button(   frame,
                 text = "2. Face Follow",
                 background = "red",
@@ -245,18 +249,17 @@ class SimpleController:
         self.valShoulderRoll()
         '''
 
-        week4 = Label(frame, text="----- Week 4 -----")
-        week4.pack()
+        Label(frame, text="----- Week 4 -----").pack()
 
         # week4t1 = Label(frame, text="1. Speech recognition")
         # week4t1.pack()
 
-        Button(   frame,
-                text = "getAngles",
-                background = "red",
-                foreground = "black",
-                # command = lambda : self.wrapper( audioObj.playThunder(  ))).pack()
-                command = lambda : self.wrapper( motionObj.getAngles() )).pack()
+        # Button(   frame,
+        #         text = "getAngles",
+        #         background = "red",
+        #         foreground = "black",
+        #         # command = lambda : self.wrapper( audioObj.playThunder(  ))).pack()
+        #         command = lambda : self.wrapper( motionObj.getAngles() )).pack()
         
         Button(   frame,
                 text = "kneelPosture",
@@ -286,6 +289,7 @@ class SimpleController:
         foreground="white",
         command=lambda: self.wrapper(clothing())).pack()
 
+        # week 4 demo
         def arrival():
             motionObj.stand()
             motionObj.rotateTheta(140)
@@ -386,6 +390,37 @@ class SimpleController:
             motionObj.moveXYCm(120,0)
             motionObj.Crouch()
 
+        ## week 5 demo
+        Label(frame, text="----- Week 5 -----").pack()
+        # start
+        Button(frame,
+            text="Start",
+            background="blue",
+            foreground="white",
+            command=lambda: self.wrapper(w5Start())).pack()
+
+        def w5Start():
+            print 'w5 start'
+
+        # come with me
+        Button(frame,
+            text="Come with me",
+            background="blue",
+            foreground="white",
+            command=lambda: self.wrapper(w5ComeWithMe())).pack()
+
+        def w5ComeWithMe():
+            print 'w5ComeWithMe'
+
+        # hasta la vista
+        Button(frame,
+            text="Hasta la Vista",
+            background="blue",
+            foreground="white",
+            command=lambda: self.wrapper(w5HastaLaVista())).pack()
+
+        def w5HastaLaVista():
+            print 'w5HastaLaVista'
 
 
     def makeXEntry(self):
