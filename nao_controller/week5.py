@@ -33,14 +33,14 @@ def comeWithMe():
     # brigit - Come with me 1, 3, 5, 7
 
     # 1. Eyes RED
+    eyesObj.redEyes()
 
     # 2. Terminator vision turns on, specifications like last time,
     # so with bounding boxes around the face, etc.
-
-
-
     # 3. Nao walks toward the human actor sitting on the floor.
     # Nao stops close to the actor. Make sure the Nao doesn't bump into the actor.
+
+    # 2 and 3
     visionObj.faceFollow(motionObj, soundObj)
     # 4. When a face is located, the Text on the terminator vision should be HELP.
 
@@ -74,6 +74,7 @@ def comeWithMe():
     trackObj.unface()
 
     # 10. The actor stands up and walks towards the Nao
+    cv2.destroyAllWindows()
     pass
 
 def hastaLaVista():
