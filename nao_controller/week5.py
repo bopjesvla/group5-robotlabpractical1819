@@ -34,9 +34,11 @@ def comeWithMe():
 
     # 1. Eyes RED
 
-    # 2. Terminator vision turns on, specications like last time, 
+    # 2. Terminator vision turns on, specifications like last time, 
     # so with bounding boxes around the face, etc.
-    
+
+
+
     # 3. Nao walks toward the human actor sitting on the floor. 
     # Nao stops close to the actor. Make sure the Nao doesn't bump into the actor.
 
