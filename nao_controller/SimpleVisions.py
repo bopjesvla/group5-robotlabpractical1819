@@ -88,7 +88,6 @@ class SimpleVisions:
         from PIL import ImageFont
         from PIL import ImageDraw
 
-        
         if distort:
             m = self.distortion(m)
 

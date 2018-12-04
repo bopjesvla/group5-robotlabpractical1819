@@ -42,6 +42,7 @@ def comeWithMe():
 
     # 2 and 3
     visionObj.faceFollow(motionObj, soundObj)
+
     # 4. When a face is located, the Text on the terminator vision should be HELP.
 
     # 5. Nao goes into a crouching position, facing the human, see Figure 1.
@@ -74,18 +75,20 @@ def comeWithMe():
     trackObj.unface()
 
     # 10. The actor stands up and walks towards the Nao
-    cv2.destroyAllWindows()
+    pass
+
+def hastaLaVistaPre():
+    # brigit - Hasta la vista 1,2
+    # 1. While the actor is walking towards the Nao, the Nao sits down.
+
+    # 2. The Nao eye LEDs turn green.
     pass
 
 def hastaLaVista():
     # print 'HastaLaVista'
-    # brigit - Hasta la vista 1,2
-
-    # 1. While the actor is walking towards the Nao, the Nao sits down.
-
-    # 2. The Nao eye LEDs turn green.
 
     # 3. The terminator vision gets a green overlay.
+    visionObj.terminator(color='green')
 
     # 4. The actor sits down facing the Nao.
 
