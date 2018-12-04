@@ -65,6 +65,7 @@ class SimpleSounds():
 
         self.finished = True
         self.audioPlayer = ALProxy("ALAudioPlayer", Config.ROBOT_IP, Config.PORT)
+        # self.audioPlayer.setOutputVolume(20)
         # self.soundSet = self.getParameter("SoundSet")
         # self.sounds = self.getParameter("Sounds")
 

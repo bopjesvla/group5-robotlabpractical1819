@@ -122,13 +122,13 @@ class SimpleVisions:
 
         return faces
 
-    def faceFollow(self, motionObj, soundObj, panel, root, stopDist=100, wave=False):
+    def faceFollow(self, motionObj, soundObj, panel=None, root=None, stopDist=100, wave=False):
         print 'face follow'
         cams = self.visionProxy.getSubscribers()
         for cam in cams:
             self.visionProxy.unsubscribe(cam)
         haar_face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
-
+        dist_reached = False
         # facePositions = [0, 20, 40, 20, 0, -20, -40, -20, 0]
 
         for n in range(0, 5):
@@ -141,12 +141,12 @@ class SimpleVisions:
             picHeight = picture[1]
             array = picture[6]
             realPicture = Image.frombytes("RGB", (picWidth, picHeight), array)
-            realPicture.save('image_{}.png'.format(n), "PNG")
+            realPicture.save('facefollow_{}.png'.format(n), "PNG")
 
             # image = cv2.imread('image_{}.png'.format(n))
             image = np.array(realPicture)
             faces = haar_face_cascade.detectMultiScale(image, minNeighbors=5); 
-            self.terminator(panel, root)
+            # self.terminator(panel, root)
             # print faces
             if len(faces)>0:
                 if len(faces) > 3:
@@ -159,9 +159,9 @@ class SimpleVisions:
 
                 rotateX = -((cx/640.)-0.5)*60.97
                 rotateY = ((cy/480.)-0.5)*np.radians(47.64)
-                rotateX = rotateX//10*10
-                print rotateX
+                rotateX = rotateX//10*10                
                 if rotateX!=0.0:
+                    print rotateX
                     motionObj.rotateTheta(rotateX)
                     motionObj.moveHeadPitch(rotateY, 0.5)
 
@@ -169,21 +169,22 @@ class SimpleVisions:
                 dist = (-58./55.)*scale + 235.
                 print 'distance:', dist
                 if dist<stopDist:
+                    dist_reached = True
                     break
                 # walksteps = max(((dist - stopDist)//8)*4, 8) # 50%
                 walksteps = max(((dist - stopDist)*3//16)*4, 8) #75%
                 
-
                 print walksteps
                 if walksteps>0:
                     motionObj.moveXYCm(walksteps,0)
 
-        print "done"
         if wave:
             soundObj.speak('Hi')
             motionObj.waveArm()
-
-        # return return_faces
+        if dist_reached:
+            print "target reached"
+            motionObj.stand()
+        print "Face follow done"
         pass
     
     def targetDetection(self):

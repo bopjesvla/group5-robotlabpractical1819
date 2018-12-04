@@ -24,7 +24,7 @@ soundObj = SimpleSounds("SpeechRecognition")
 eyesObj = SimpleEyes()
 audioObj = SimpleAudio()
 touchObj = SimpleTouch()
-SpeechRecog = getASR()
+
 
 def comeWithMe():
     print 'comeWithMe'
@@ -37,14 +37,15 @@ def comeWithMe():
     
     # 3. Nao walks toward the human actor sitting on the floor. 
     # Nao stops close to the actor. Make sure the Nao doesn't bump into the actor.
-
+    visionObj.faceFollow(motionObj, soundObj)
     # 4. When a face is located, the Text on the terminator vision should be HELP.
 
     # 5. Nao goes into a crouching position, facing the human, see Figure 1.
-
+    
     # 6. At the same time the Nao says COME WITH ME IF YOU WANT TO LIVE. = Sameera
     # See the python files in the Gitlab repo for examples of running parallel processes on the Nao.
-    soundObj.speakParallel("COME WITH ME IF YOU WANT TO LIVE")
+    # soundObj.speakParallel("COME WITH ME IF YOU WANT TO LIVE")
+    soundObj.speak("COME WITH Me IF YOU WANT TO Live")
 
     # 7. The Nao goes back into standing position and walks 2 meters in a random direction.
 
@@ -59,7 +60,7 @@ def comeWithMe():
     pass
 
 def hastaLaVista():
-    print 'HastaLaVista'
+    # print 'HastaLaVista'
     # brigit - Hasta la vista 1,2
 
     # 1. While the actor is walking towards the Nao, the Nao sits down.
@@ -72,6 +73,8 @@ def hastaLaVista():
 
     # 5. The actor touches the Nao's head sensor, the Nao says AFFIRMATIVE, enters parrot mode.
     '''says AFFIRMATIVE > implemented in the passive loop '''
+    if touchObj.w5HastaLaVista_T5(soundObj):
+        SpeechRecog.parrot(True)
     # 6. Actor says NO PROBLEMO, Nao repeats.
 
     # 7. Actor says BITE ME, Nao repeats.
@@ -86,27 +89,38 @@ def hastaLaVista():
 
     pass
 
+SpeechRecog = getASR()
+
 def main():
     """ Main entry point
     """
-    motionObj.stand()
+    # motionObj.stand()
     try:
-        
-        SpeechRecog.subASR()
+        # SpeechRecog.subASR()
+        n = 0
         while True:
             time.sleep(1)
-            asrST = SpeechRecog.getActionStatus()
+            n += 1
+            
+            if n%2==0:
+                print 'red'
+                eyesObj.redEyes()
+            else:
+                print 'blue'
+                eyesObj.blueEyes()
+            # asrST = SpeechRecog.getActionStatus()
+            asrST = False
             if asrST:
                 # soundObj.speak("start Come with me")
                 SpeechRecog.setActionStatus(False)
                 stopASR()
-                # SpeechRecog = None
-                comeWithMe()
+                # comeWithMe()
+            hastaLaVista()
     except KeyboardInterrupt:
         print "Interrupted by user, shutting down"
         # SpeechRecog.unsubASR()
         # if SpeechRecog != None:
-        #     stopASR()
+        stopASR()
         sys.exit(0)
 
 if __name__ == "__main__":

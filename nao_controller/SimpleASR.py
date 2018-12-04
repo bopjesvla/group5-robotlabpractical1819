@@ -38,6 +38,8 @@ class SpeechRecog(ALModule):
     """
     def __init__(self, name):
         ALModule.__init__(self, name)
+        self.name = name
+        self.parrot = False
         am = ALProxy("ALAutonomousMoves")
         am.setExpressiveListeningEnabled(False)
         am.setBackgroundStrategy("none")
@@ -45,21 +47,27 @@ class SpeechRecog(ALModule):
 
     def unsubASR(self):
         self.speechProxy.unsubscribe("Test_ASR")
-        memory.unsubscribeToEvent("WordRecognized", "SpeechRecog")
-        
+        memory.unsubscribeToEvent("WordRecognized", self.name)
         print('unsub ASR')
+
+    def parrot(self, status=False):
+        self.parrot = status
 
     def subASR(self):
         self.speechProxy = ALProxy("ALSpeechRecognition")
+        self.tts = ALProxy("ALTextToSpeech")
         # self.speechProxy = ALProxy("ALSpeechRecognition", Config.ROBOT_IP, Config.PORT)
+        self.speechProxy.setVisualExpression(False)
         self.speechProxy.setLanguage("English")
-        self.vocabulary = ['action','stop', 'NO PROBLEMO', 'BITE ME', 'HASTA LA VISTA', 'CUT']
-        # self.speechProxy.setVocabulary(self.vocabulary, False)
+        self.vocabulary = ['action', 'NO PROBLEMO', 'BITE ME', 'HASTA LA VISTA BABY', 'CUT']
+        self.speechProxy.pause(True)
+        self.speechProxy.setVocabulary(self.vocabulary, False)
+        self.speechProxy.pause(False)
 
         global memory
         memory = ALProxy("ALMemory")
         # memory = ALProxy("ALMemory", Config.ROBOT_IP, Config.PORT)
-        memory.subscribeToEvent("WordRecognized", "SpeechRecog", "onTouched")
+        memory.subscribeToEvent("WordRecognized", self.name, "onTouched")
         # memory.subscribeToEvent("ALSpeechRecognition/Status", "SpeechRecog", "status")
         self.speechProxy.subscribe("Test_ASR")
 
@@ -70,25 +78,23 @@ class SpeechRecog(ALModule):
         """
         # Unsubscribe to the event when talking,
         # to avoid repetitions
-        memory.unsubscribeToEvent("WordRecognized", "SpeechRecog")
+        memory.unsubscribeToEvent("WordRecognized", self.name)
 
         try:
             print(value)
-            if value[0] in self.vocabulary and value[1]>0.5:
+            if value[0] in self.vocabulary and value[1]>0.4:
                 if value[0]=='action':
                     # self.tts.say('action receied. Lets start "come with me"')
                     global action_status
                     action_status = True
-                # elif value[0]=='stop':
-                #     SpeechRecog.unsubASR()
-                # else:
-                    # self.tts.say(value[0])
+                else:
+                    if self.parrot:
+                        self.tts.say(value[0])
         except: 
             pass
         
-
         # Subscribe again to the event
-        memory.subscribeToEvent("WordRecognized", "SpeechRecog", "onTouched")
+        memory.subscribeToEvent("WordRecognized", self.name, "onTouched")
 
     def getActionStatus(self):
         global action_status
@@ -109,10 +115,10 @@ myBroker = None
 def getASR():
     global myBroker
     myBroker = ALBroker("myBroker",
-    "0.0.0.0",   # listen to anyone
-    0,           # find a free port and use it
-    Config.ROBOT_IP,          # parent broker IP
-    Config.PORT)        # parent broker port
+        "0.0.0.0",   # listen to anyone
+        0,           # find a free port and use it
+        Config.ROBOT_IP,          # parent broker IP
+        Config.PORT)        # parent broker port
 
     global SpeechRecog
     SpeechRecog = SpeechRecog("SpeechRecog")

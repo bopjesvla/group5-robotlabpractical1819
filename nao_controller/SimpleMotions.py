@@ -104,7 +104,7 @@ class SimpleMotions:
     input given in integer cm
     '''
     # TODO figure out how many m one footstep is, for all cases so L R Bw Fw
-    def moveXYCm(self, x, y):
+    def moveXYCm(self, x, y, lastStand = True):
         self.stand()
         # convert from input string to integer
         x = int(x)
@@ -177,7 +177,10 @@ class SimpleMotions:
             self.setLastStep(lastMovedLeg, direction, positivity, stepSize)
         else:
             print "error: either x or y input has to be 0"
-
+        
+        if lastStand:
+            self.stand()
+        print 'movexycm done'
         #self.standStraight()
         #logObj.logWrite(time.time().__str__() + "_{0}_{1}_{2}_{3}_{4}".format(action, x, y, theta, Config.SPEED))
         return [time.time().__str__(), action, x, y, theta, Config.SPEED]
@@ -229,7 +232,7 @@ class SimpleMotions:
             x = 0.6 # something with stepSize? see above
             y = 0
         self.setStep(legToMove, x, y, theta)
-        self.stand()
+        # self.stand()
         #self.standStraight()
 
     # get the amount of steps needed to rotate amount of theta in. steps is how many steps the NAO needs to take to make the turn,
@@ -508,6 +511,9 @@ class SimpleMotions:
 
     def Crouch(self):
         self.postureProxy.goToPosture("Crouch", 0.2)
+
+    def crouchParallel(self):
+        self.postureProxy.post.goToPosture("Crouch", 0.7)
 
     def centerHead(self):
         self.motionProxy.angleInterpolationWithSpeed(["HeadPitch", "HeadYaw"], [0.0, 0.0], 0.2)
