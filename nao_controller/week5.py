@@ -6,6 +6,7 @@ from Config import Config
 from SimpleMotions import SimpleMotions
 from SimpleVisions import SimpleVisions
 from SimpleSounds import SimpleSounds
+from SimpleTracker import SimpleTracker
 from SimpleEyes import SimpleEyes
 from SimpleTouch import SimpleTouch
 from SimpleAudio import SimpleAudio
@@ -22,6 +23,7 @@ motionObj = SimpleMotions()
 visionObj = SimpleVisions()
 soundObj = SimpleSounds("SpeechRecognition")
 eyesObj = SimpleEyes()
+trackObj = SimpleTracker()
 audioObj = SimpleAudio()
 touchObj = SimpleTouch()
 SpeechRecog = getASR()
@@ -48,12 +50,25 @@ def comeWithMe():
 
     # 7. The Nao goes back into standing position and walks 2 meters in a random direction.
 
+    motionObj.stand()
+
+    rot = np.random.choice([120,140,160,180,-120,-140,-160,-180])
+    motionObj.rotateTheta(rot)
+
+    motionObj.moveXYCm(120, 0)
+
     # 8. The Nao turns around and looks at the actor.
     # use turn angles from (7) to turn the head - so Nao will directly look at the actor
+
+    motionObj.rotateTheta(180)
+
+    trackObj.face()
 
     # 9. The Nao does a 'come here' gesture with its arm, while saying COME HERE SARAH CONNOR, NAO!. = Sameera
     soundObj.speakParallel("COME HERE SARAH CONNOR, NAO!")
     motionObj.gestureCome() # uncomment
+
+    trackObj.unface()
 
     # 10. The actor stands up and walks towards the Nao
     pass
@@ -111,3 +126,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    motionObj.rest()
