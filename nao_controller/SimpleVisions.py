@@ -58,7 +58,7 @@ class SimpleVisions:
         img = Image.open("terminated.png")
         self.panel.configure(image=img)
 
-    def terminator(self, panel, root, distort=False, color="red"):
+    def terminator(self, distort=False, color="red"):
         #motionObj.moveHeadPitch(0.3, 0.4)
         #time.sleep(2)
         videoClient = self.visionProxy.subscribeCamera("python_client", 0, resolution, colorSpace, 5)
@@ -114,15 +114,15 @@ class SimpleVisions:
             b = b.point(lambda i: i / 1.5)
 
         realPicture = Image.merge('RGB', (r,g,b))
-        realPicture.save("terminated.png", "PNG")
-        tkimage = ImageTk.PhotoImage(realPicture)
-        panel.configure(image=tkimage)
-        root.update()
-        # realPicture.show()
+
+        cv2.imshow('image',np.array(realPicture)[:, :, ::-1].copy())
+        cv2.waitKey(10) & 0xFF
+
+        # realPicture.save("terminated.png", "PNG")
 
         return faces
 
-    def faceFollow(self, motionObj, soundObj, panel=None, root=None, stopDist=100, wave=False):
+    def faceFollow(self, motionObj, soundObj, stopDist=100, wave=False):
         print 'face follow'
         cams = self.visionProxy.getSubscribers()
         for cam in cams:
@@ -146,7 +146,7 @@ class SimpleVisions:
             # image = cv2.imread('image_{}.png'.format(n))
             image = np.array(realPicture)
             faces = haar_face_cascade.detectMultiScale(image, minNeighbors=5); 
-            # self.terminator(panel, root)
+            self.terminator()
             # print faces
             if len(faces)>0:
                 if len(faces) > 3:

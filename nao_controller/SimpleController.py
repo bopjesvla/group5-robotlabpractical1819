@@ -390,7 +390,7 @@ class SimpleController:
             motionObj.moveXYCm(120,0)
             motionObj.Crouch()
 
-        ## week 5 demo
+        # week 5 demo
         Label(frame, text="----- Week 5 -----").pack()
 
         Label(frame, text="----- Director -----").pack()

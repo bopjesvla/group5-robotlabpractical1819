@@ -113,6 +113,7 @@ class SimpleMotions:
         theta = 0
         #self.standStraight()
         self.motionProxy.walkInit()
+        lastMovedLeg = Config.LLEG
 
         # pos is L, neg is R
         if x == 0:
