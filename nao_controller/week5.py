@@ -97,7 +97,7 @@ def hastaLaVista():
     # 7. Actor says BITE ME, Nao repeats.
     # 8. Actor says HASTA LA VISTA BABY, Nao repeats.
     # 9. Actor touches Nao's head, Nao exits parrot mode and says TALK TO THE HAND.
-    
+    letsParrot()
 
     # 10. When the director Nao hears this, it says CUT!.
 
@@ -127,13 +127,16 @@ def main():
             time.sleep(1)
             # asrST = SpeechRecog.getActionStatus()
             asrST = False
+            hastaEn = False
             if asrST:
                 # soundObj.speak("start Come with me")
                 SpeechRecog.setActionStatus(False)
                 stopASR()
                 # comeWithMe()
-                hastaLaVista()
-            letsParrot()
+                # hastaLaVistaPre()
+                hastaEn = True
+            if hastaEn:
+                hastaLaVista
     except KeyboardInterrupt:
         print "Interrupted by user, shutting down"
         # SpeechRecog.unsubASR()
