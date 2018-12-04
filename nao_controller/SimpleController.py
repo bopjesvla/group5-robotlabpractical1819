@@ -56,10 +56,9 @@ class SimpleController:
         self.createButtons()
         frame.pack(side='left')
 
-        img = Image.open("terminated.png")
-        tkimage = ImageTk.PhotoImage(img)
-        self.panel = Label(frame2, image=tkimage)
-        self.panel.pack()
+        # img = Image.open("terminated.png")
+        # tkimage = ImageTk.PhotoImage(img)
+        # self.panel = Label(frame2, image=tkimage)
         # self.panel.pack()
 
         frame2.pack(side='left')
@@ -395,25 +394,34 @@ class SimpleController:
 
         ## week 5 demo
         Label(frame, text="----- Week 5 -----").pack()
-        # start
+
+        Label(frame, text="----- Director -----").pack()
+        # Action
         Button(frame,
-            text="Start",
-            background="blue",
-            foreground="white",
-            command=lambda: self.wrapper(w5Start())).pack()
+            text="Action",
+            background="green",
+            foreground="black",
+            command=lambda: self.wrapper(w5Action())).pack()
+        # Cut
+        Button(frame,
+            text="Cut",
+            background="red",
+            foreground="black",
+            command=lambda: self.wrapper(w5Cut())).pack()
 
-        def w5Start():
-            '''The Nao is placed, standing in the middle of the room. About 1 meter next to the Nao,
-            facing the Nao, one actor is sitting on the floor. The director Nao is placed sitting nearby.
-            The director Nao yells ACTION!.'''
-
+        def w5Action():
+            soundObj.speak("Action")
+        
+        def w5Cut():
+            soundObj.speak("Cut")
+        
 
         # come with me
-        Button(frame,
-            text="Come with me",
-            background="blue",
-            foreground="white",
-            command=lambda: self.wrapper(w5ComeWithMe())).pack()
+        # Button(frame,
+        #     text="Come with me",
+        #     background="blue",
+        #     foreground="white",
+        #     command=lambda: self.wrapper(w5ComeWithMe())).pack()
 
         def w5ComeWithMe():
             print 'w5ComeWithMe'
@@ -449,11 +457,11 @@ class SimpleController:
 
 
         # hasta la vista
-        Button(frame,
-            text="Hasta la Vista",
-            background="blue",
-            foreground="white",
-            command=lambda: self.wrapper(w5HastaLaVista())).pack()
+        # Button(frame,
+        #     text="Hasta la Vista",
+        #     background="blue",
+        #     foreground="white",
+        #     command=lambda: self.wrapper(w5HastaLaVista())).pack()
 
         def w5HastaLaVista():
             print 'w5HastaLaVista'
