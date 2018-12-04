@@ -50,8 +50,12 @@ class SpeechRecog(ALModule):
         memory.unsubscribeToEvent("WordRecognized", self.name)
         print('unsub ASR')
 
-    def parrot(self, status=False):
-        self.parrot = status
+    def parrotOff(self):
+        self.parrot = False
+    
+    def parrotOn(self):
+        self.parrot = True
+    
 
     def subASR(self):
         self.speechProxy = ALProxy("ALSpeechRecognition")

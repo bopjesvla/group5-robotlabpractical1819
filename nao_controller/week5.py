@@ -88,23 +88,26 @@ def hastaLaVista():
 
     # 4. The actor sits down facing the Nao.
 
-    # 5. The actor touches the Nao's head sensor, the Nao says AFFIRMATIVE, enters parrot mode.
-    '''says AFFIRMATIVE > implemented in the passive loop '''
-    if touchObj.w5HastaLaVista_T5(soundObj):
-        SpeechRecog.parrot(True)
+    # 5. The actor touches the Nao's head sensor, the Nao says AFFIRMATIVE, enters parrot mode. - Sameera
     # 6. Actor says NO PROBLEMO, Nao repeats.
-
     # 7. Actor says BITE ME, Nao repeats.
-
     # 8. Actor says HASTA LA VISTA BABY, Nao repeats.
-
     # 9. Actor touches Nao's head, Nao exits parrot mode and says TALK TO THE HAND.
+    
 
     # 10. When the director Nao hears this, it says CUT!.
 
     # 11. The Nao stands up and walks to the middle of the room.
 
     pass
+
+def letsParrot():
+    if touchObj.w5HastaLaVista_T5(soundObj) == True:
+        SpeechRecog.parrotOn()
+        print 'parrot ON'
+    elif touchObj.w5HastaLaVista_T5(soundObj) == False:
+        SpeechRecog.parrotOff()
+        print 'parrot OFF'
 
 SpeechRecog = getASR()
 
@@ -113,18 +116,11 @@ def main():
     """
     # motionObj.stand()
     try:
-        # SpeechRecog.subASR()
+        global SpeechRecog
+        SpeechRecog.subASR()
         n = 0
         while True:
             time.sleep(1)
-            n += 1
-            
-            if n%2==0:
-                print 'red'
-                eyesObj.redEyes()
-            else:
-                print 'blue'
-                eyesObj.blueEyes()
             # asrST = SpeechRecog.getActionStatus()
             asrST = False
             if asrST:
@@ -132,7 +128,8 @@ def main():
                 SpeechRecog.setActionStatus(False)
                 stopASR()
                 # comeWithMe()
-            hastaLaVista()
+                hastaLaVista()
+            letsParrot()
     except KeyboardInterrupt:
         print "Interrupted by user, shutting down"
         # SpeechRecog.unsubASR()

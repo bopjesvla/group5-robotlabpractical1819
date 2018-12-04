@@ -206,7 +206,7 @@ class SimpleController:
                 text = "2. Face Follow",
                 background = "red",
                 foreground = "black",
-                command = lambda : self.wrapper( visionObj.faceFollow( motionObj , soundObj, self.panel, root ))).pack()
+                command = lambda : self.wrapper( visionObj.faceFollow( motionObj , soundObj ))).pack()
 
         def terminate():
             eyesObj.redEyes()
