@@ -58,7 +58,7 @@ class SimpleVisions:
         img = Image.open("terminated.png")
         self.panel.configure(image=img)
 
-    def terminator(self, panel, root, distort=False):
+    def terminator(self, panel, root, distort=False, color="red"):
         #motionObj.moveHeadPitch(0.3, 0.4)
         #time.sleep(2)
         videoClient = self.visionProxy.subscribeCamera("python_client", 0, resolution, colorSpace, 5)
@@ -79,7 +79,7 @@ class SimpleVisions:
             (l, t, w, h) = face
             r = l + w
             b = t + h
-            realPicture.save("analyzeThis.png", "PNG")
+            #realPicture.save("analyzeThis.png", "PNG")
             m[t:b,l-1:l+1,:] = 255
             m[t:b,r-1:r+1,:] = 255
             m[t-1:t+1,l:r,:] = 255
@@ -102,9 +102,17 @@ class SimpleVisions:
             draw.text((10, 10),text,(0,0,0))
 
         r, g, b = realPicture.split()
-        r = r.point(lambda i: i * 1.5)
-        g = g.point(lambda i: i / 1.5)
-        b = b.point(lambda i: i / 1.5)
+
+        #Week5 Hasta Step 3
+        if (color == "green"):
+            r = r.point(lambda i: i / 1.5)
+            g = g.point(lambda i: i * 1.5)
+            b = b.point(lambda i: i / 1.5)
+        else:
+            r = r.point(lambda i: i * 1.5)
+            g = g.point(lambda i: i / 1.5)
+            b = b.point(lambda i: i / 1.5)
+
         realPicture = Image.merge('RGB', (r,g,b))
         realPicture.save("terminated.png", "PNG")
         tkimage = ImageTk.PhotoImage(realPicture)
@@ -272,4 +280,3 @@ class SimpleVisions:
             imageArr[:,i] = np.roll(img[:,i], int (shift(i)))
 
         return imageArr
-        
