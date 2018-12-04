@@ -122,7 +122,7 @@ class SimpleVisions:
 
         return faces
 
-    def faceFollow(self, motionObj, soundObj, panel, root, stopDist=100, wave=False):
+    def faceFollow(self, motionObj, soundObj, stopDist=100, wave=False):
         print 'face follow'
         cams = self.visionProxy.getSubscribers()
         for cam in cams:
@@ -146,7 +146,7 @@ class SimpleVisions:
             # image = cv2.imread('image_{}.png'.format(n))
             image = np.array(realPicture)
             faces = haar_face_cascade.detectMultiScale(image, minNeighbors=5); 
-            self.terminator(panel, root)
+            self.terminator()
             # print faces
             if len(faces)>0:
                 if len(faces) > 3:
