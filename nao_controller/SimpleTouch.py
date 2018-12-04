@@ -85,5 +85,6 @@ class SimpleTouch:
         elif(touchStatus == False and preTouchStatus == True):
             preTouchStatus = False
             soundObj.speak("AFFIRMATIVE")
+            return True
         else:
             pass

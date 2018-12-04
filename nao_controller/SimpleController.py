@@ -56,10 +56,10 @@ class SimpleController:
         self.createButtons()
         frame.pack(side='left')
 
-        # img = Image.open("terminated.png")
-        # tkimage = ImageTk.PhotoImage(img)
-        # self.panel = Label(frame2, image=tkimage)
-        # self.panel.pack()
+        img = Image.open("terminated.png")
+        tkimage = ImageTk.PhotoImage(img)
+        self.panel = Label(frame2, image=tkimage)
+        self.panel.pack()
 
         frame2.pack(side='left')
         if not debug:
@@ -95,7 +95,7 @@ class SimpleController:
                 background = "green",
                 foreground = "black",
                 command = lambda : self.wrapper(motionObj.sit())).pack()
-        '''
+        
         randButton = Button(  frame,
                 text = "Random walk",
                 background = "green",
@@ -123,7 +123,6 @@ class SimpleController:
         rotateButton.pack()
 
         self.makeRotationThetaEntry()
-        '''
 
         stopButton = Button(    frame,
                 text = "STOP!",
@@ -207,8 +206,7 @@ class SimpleController:
                 text = "2. Face Follow",
                 background = "red",
                 foreground = "black",
-                command = lambda : self.wrapper( visionObj.faceFollow( motionObj , soundObj, self.panel, root )))
-        btnFaceFollow.pack()
+                command = lambda : self.wrapper( visionObj.faceFollow( motionObj , soundObj, self.panel, root ))).pack()
 
         def terminate():
             eyesObj.redEyes()
@@ -494,14 +492,14 @@ class SimpleController:
         self.moveX = Entry(frame)
         self.moveX.pack()
         self.moveX.delete(0, END)
-        self.moveX.insert(0, "enter in cm")
+        self.moveX.insert(0, "4")
         pass
 
     def makeYEntry(self):
         self.moveY = Entry(frame)
         self.moveY.pack()
         self.moveY.delete(0, END)
-        self.moveY.insert(0, "enter in cm")
+        self.moveY.insert(0, "0")
         pass
 
     def makeRotationThetaEntry(self):
