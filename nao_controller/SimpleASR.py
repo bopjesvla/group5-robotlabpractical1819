@@ -112,20 +112,6 @@ class SpeechRecog(ALModule):
                 else:
                     pass
 
-            # if value[0] in self.vocabulary and value[1]>0.45:
-            #     if value[0]=='action':
-            #         global action_status
-            #         action_status = True
-            #     elif value[0]=='cut' and value[1]>0.53:
-            #         global cut_status
-            #         cut_status = True
-            #     else:
-            #         if self.parrot:
-            #             self.tts.say(value[0])
-            # elif value[0] in self.vocabulary and value[1]>0.3 and value[0]=='HASTA LA VISTA BABY':
-            #     if self.parrot:
-            #         self.tts.say(value[0])
-
         except: 
             pass
         

@@ -57,8 +57,8 @@ def comeWithMe():
 
     motionObj.stand()
 
-    rot = np.random.choice([120,140,160,180,-120,-140,-160,-180])
-    rot = 110
+    rot = np.random.choice([140,160,180,-140,-160,-180])
+    # rot = 110
     motionObj.rotateTheta(rot)
 
     motionObj.moveXYCm(60, 0)
@@ -66,7 +66,7 @@ def comeWithMe():
     # 8. The Nao turns around and looks at the actor.
     # use turn angles from (7) to turn the head - so Nao will directly look at the actor
 
-    motionObj.rotateTheta(-rot)
+    motionObj.rotateTheta(180)
 
     trackObj.face()
 
@@ -123,8 +123,8 @@ SpeechRecog = getASR()
 def main():
     """ Main entry point
     """
-    # motionObj.stand()
-    motionObj.sit()
+    motionObj.stand()
+
     try:
         global SpeechRecog
         global lastStage
@@ -133,23 +133,11 @@ def main():
         hastaEn = False
         lastStage = False
 
-        # words = ['action', 'no problemo', 'bite me', 'hasta la vista baby', 'cut']
-        # for w in words:
-            # soundObj.speak(w)
-        # SpeechRecog.parrotOn()
-
         while True:
-            # letsParrot()
-            # visionObj.terminator(color='green')
-
-            # time.sleep(0.1)
-            # asrST = False
             asrST = SpeechRecog.getActionStatus()
             
             if asrST:
-                # soundObj.speak("start Come with me")
                 SpeechRecog.setActionStatus(False)
-                # stopASR() - Done Use this
                 comeWithMe()
                 hastaLaVistaPre()
                 hastaEn = True
