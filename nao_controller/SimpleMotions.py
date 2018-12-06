@@ -519,3 +519,6 @@ class SimpleMotions:
     def centerHead(self):
         self.motionProxy.angleInterpolationWithSpeed(["HeadPitch", "HeadYaw"], [0.0, 0.0], 0.2)
 
+    def CrouchWhileSpeaking(self):
+        self.postureProxy.post.goToPosture("Crouch", 0.7)
+        # self.text.say("COME WITH ME IF YOU WANT TO LIVE")

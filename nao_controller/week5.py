@@ -17,7 +17,8 @@ if Config.LINUX:
 
 debug = False
 SpeechRecog = None
-    
+lastStage = False
+
 # if not debug:
 motionObj = SimpleMotions()
 visionObj = SimpleVisions()
@@ -41,25 +42,26 @@ def comeWithMe():
     # Nao stops close to the actor. Make sure the Nao doesn't bump into the actor.
 
     # 2 and 3
-    visionObj.faceFollow(motionObj, soundObj)
+    visionObj.faceFollow(motionObj, soundObj, stopDist=80)
 
     # 4. When a face is located, the Text on the terminator vision should be HELP.
 
     # 5. Nao goes into a crouching position, facing the human, see Figure 1.
-    
+    motionObj.CrouchWhileSpeaking()
     # 6. At the same time the Nao says COME WITH ME IF YOU WANT TO LIVE. = Sameera
     # See the python files in the Gitlab repo for examples of running parallel processes on the Nao.
     # soundObj.speakParallel("COME WITH ME IF YOU WANT TO LIVE")
-    soundObj.speak("COME WITH Me IF YOU WANT TO Live")
+    soundObj.speak("COME WITH Me IF YOU WANT TO Liv")
 
     # 7. The Nao goes back into standing position and walks 2 meters in a random direction.
 
     motionObj.stand()
 
-    rot = np.random.choice([120,140,160,180,-120,-140,-160,-180])
+    rot = np.random.choice([140,160,180,-140,-160,-180])
+    # rot = 110
     motionObj.rotateTheta(rot)
 
-    motionObj.moveXYCm(120, 0)
+    motionObj.moveXYCm(60, 0)
 
     # 8. The Nao turns around and looks at the actor.
     # use turn angles from (7) to turn the head - so Nao will directly look at the actor
@@ -78,11 +80,13 @@ def comeWithMe():
     pass
 
 def hastaLaVistaPre():
+    print 'hastaLaVistaPre'
     # brigit - Hasta la vista 1,2
     # 1. While the actor is walking towards the Nao, the Nao sits down.
-
+    motionObj.sit()
+    eyesObj.greenEyes()
     # 2. The Nao eye LEDs turn green.
-    pass
+    # pass
 
 def hastaLaVista():
     # print 'HastaLaVista'
@@ -92,51 +96,67 @@ def hastaLaVista():
 
     # 4. The actor sits down facing the Nao.
 
-    # 5. The actor touches the Nao's head sensor, the Nao says AFFIRMATIVE, enters parrot mode.
-    '''says AFFIRMATIVE > implemented in the passive loop '''
-    if touchObj.w5HastaLaVista_T5(soundObj):
-        SpeechRecog.parrot(True)
+    # 5. The actor touches the Nao's head sensor, the Nao says AFFIRMATIVE, enters parrot mode. - Sameera
     # 6. Actor says NO PROBLEMO, Nao repeats.
-
     # 7. Actor says BITE ME, Nao repeats.
-
     # 8. Actor says HASTA LA VISTA BABY, Nao repeats.
-
     # 9. Actor touches Nao's head, Nao exits parrot mode and says TALK TO THE HAND.
-
-    # 10. When the director Nao hears this, it says CUT!.
-
-    # 11. The Nao stands up and walks to the middle of the room.
+    letsParrot()
 
     pass
+
+def letsParrot():
+    if touchObj.w5HastaLaVista_T5(soundObj) == True:
+        SpeechRecog.parrotOn()
+        print 'parrot ON'
+    elif touchObj.w5HastaLaVista_T5(soundObj) == False:
+        SpeechRecog.parrotOff()
+        print 'parrot OFF'
+        global lastStage
+        lastStage = True
+        SpeechRecog.cutEnable()
+    else:
+        pass
 
 SpeechRecog = getASR()
 
 def main():
     """ Main entry point
     """
-    # motionObj.stand()
+    motionObj.stand()
+
     try:
-        # SpeechRecog.subASR()
+        global SpeechRecog
+        global lastStage
+        SpeechRecog.subASR()
         n = 0
+        hastaEn = False
+        lastStage = False
+
         while True:
-            time.sleep(1)
-            n += 1
+            asrST = SpeechRecog.getActionStatus()
             
-            if n%2==0:
-                print 'red'
-                eyesObj.redEyes()
-            else:
-                print 'blue'
-                eyesObj.blueEyes()
-            # asrST = SpeechRecog.getActionStatus()
-            asrST = False
             if asrST:
-                # soundObj.speak("start Come with me")
                 SpeechRecog.setActionStatus(False)
-                stopASR()
-                # comeWithMe()
-            hastaLaVista()
+                comeWithMe()
+                hastaLaVistaPre()
+                hastaEn = True
+                asrST = False
+                
+            if hastaEn:
+                hastaLaVista()
+            
+            if lastStage:
+                asrCut = SpeechRecog.getCutStatus()
+                # 10. When the director Nao hears this, it says CUT!.
+                # 11. The Nao stands up and walks to the middle of the room.
+                if asrCut:
+                    SpeechRecog.setCutStatus(False)
+                    motionObj.stand(0.4)
+                    motionObj.rotateTheta(140)
+                    motionObj.moveXYCm(120, 0)
+                    motionObj.Crouch()
+
     except KeyboardInterrupt:
         print "Interrupted by user, shutting down"
         # SpeechRecog.unsubASR()

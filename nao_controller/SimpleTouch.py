@@ -32,6 +32,7 @@ import re
 touchStatus = False
 preTouchStatus = False
 count = 0
+pcount = 0
 
 class SimpleTouch:
     def __init__(self):
@@ -84,7 +85,14 @@ class SimpleTouch:
             preTouchStatus = True
         elif(touchStatus == False and preTouchStatus == True):
             preTouchStatus = False
-            soundObj.speak("AFFIRMATIVE")
-            return True
+            global pcount
+            pcount += 1
+            if(pcount%2==1):
+                soundObj.speak("AFFIRMATIVE")
+                return True
+            else:
+                soundObj.speak("TALK TO THE HAND")
+                return False
+            
         else:
-            pass
+            return None

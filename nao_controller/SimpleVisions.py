@@ -25,7 +25,8 @@ import cv2
 import almath
 import vision_definitions
 from naoqi import ALProxy
-
+from PIL import ImageFont
+from PIL import ImageDraw
 import time
 # import Image
 from PIL import Image, ImageTk, ImageOps
@@ -64,7 +65,7 @@ class SimpleVisions:
         videoClient = self.visionProxy.subscribeCamera("python_client", 0, resolution, colorSpace, 5)
         self.visionProxy.setCameraParameter(videoClient, 18, 0)
         picture = self.visionProxy.getImageRemote(videoClient)
-        print "picture taken"
+        print "tm picture taken"
         #picture2 = self.visionProxy.getImageLocal(videoClient)
         self.visionProxy.unsubscribe(videoClient)
         picWidth = picture[0]
@@ -80,13 +81,12 @@ class SimpleVisions:
             r = l + w
             b = t + h
             #realPicture.save("analyzeThis.png", "PNG")
-            m[t:b,l-1:l+1,:] = 255
-            m[t:b,r-1:r+1,:] = 255
-            m[t-1:t+1,l:r,:] = 255
-            m[b-1:b+1,l:r,:] = 255
+            m[t:b,l-1:l+1,:] = 0
+            m[t:b,r-1:r+1,:] = 0
+            m[t-1:t+1,l:r,:] = 0
+            m[b-1:b+1,l:r,:] = 0
 
-        from PIL import ImageFont
-        from PIL import ImageDraw
+        
 
         if distort:
             m = self.distortion(m)
@@ -95,10 +95,12 @@ class SimpleVisions:
 
         if len(faces) > 0:
             draw = ImageDraw.Draw(realPicture)
-            # font = ImageFont.truetype(<font-file>, <font-size>)
+            font = ImageFont.truetype(font=('arial.ttf'),size=36)
             # draw.text((x, y),"Sample Text",(r,g,b))
-            text = 't: {}\nb: {}\nr: {}\nl: {}'.format(t, b, r, l)
-            draw.text((10, 10),text,(0,0,0))
+            # text = 't: {}\nb: {}\nr: {}\nl: {}'.format(t, b, r, l)
+            text = 'HELP'
+            draw.text((faces[0][0], faces[0][1]),text,(0,0,255),font=font)
+
 
         r, g, b = realPicture.split()
 
@@ -159,7 +161,8 @@ class SimpleVisions:
                 rotateX = -((cx/640.)-0.5)*60.97
                 rotateY = ((cy/480.)-0.5)*np.radians(47.64)
                 rotateX = rotateX//10*10                
-                if rotateX!=0.0:
+                # if rotateX!=0.0:
+                if rotateX>10 or rotateX<-10:
                     print rotateX
                     motionObj.rotateTheta(rotateX)
                     motionObj.moveHeadPitch(rotateY, 0.5)

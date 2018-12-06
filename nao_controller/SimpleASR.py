@@ -31,6 +31,7 @@ import math
 memory = None
 SpeechRecog = None
 action_status = None
+cut_status = None
 
 class SpeechRecog(ALModule):
     """ A simple module able to react
@@ -40,6 +41,7 @@ class SpeechRecog(ALModule):
         ALModule.__init__(self, name)
         self.name = name
         self.parrot = False
+        self.cutEnable = False
         am = ALProxy("ALAutonomousMoves")
         am.setExpressiveListeningEnabled(False)
         am.setBackgroundStrategy("none")
@@ -50,8 +52,12 @@ class SpeechRecog(ALModule):
         memory.unsubscribeToEvent("WordRecognized", self.name)
         print('unsub ASR')
 
-    def parrot(self, status=False):
-        self.parrot = status
+    def parrotOff(self):
+        self.parrot = False
+    
+    def parrotOn(self):
+        self.parrot = True
+    
 
     def subASR(self):
         self.speechProxy = ALProxy("ALSpeechRecognition")
@@ -59,7 +65,9 @@ class SpeechRecog(ALModule):
         # self.speechProxy = ALProxy("ALSpeechRecognition", Config.ROBOT_IP, Config.PORT)
         self.speechProxy.setVisualExpression(False)
         self.speechProxy.setLanguage("English")
-        self.vocabulary = ['action', 'NO PROBLEMO', 'BITE ME', 'HASTA LA VISTA BABY', 'CUT']
+        # self.vocabulary = ['action', 'no problemo', 'bite me', 'hasta la vista baby', 'cut']
+        self.vocabulary = ['action', 'NO PROBLEMO', 'BITE ME', 'HASTA LA VISTA BABY', 'cut']
+        
         self.speechProxy.pause(True)
         self.speechProxy.setVocabulary(self.vocabulary, False)
         self.speechProxy.pause(False)
@@ -82,14 +90,28 @@ class SpeechRecog(ALModule):
 
         try:
             print(value)
-            if value[0] in self.vocabulary and value[1]>0.4:
-                if value[0]=='action':
-                    # self.tts.say('action receied. Lets start "come with me"')
+            if value[0] in self.vocabulary:
+                # self.tts.say(value[0])
+            
+                if value[0]=='action' and value[1]>0.45:
                     global action_status
                     action_status = True
-                else:
+                elif value[0]=='cut' and value[1]>0.39:
+                    if self.cutEnable:
+                        global cut_status
+                        cut_status = True
+                elif value[0]=='NO PROBLEMO' and value[1]>0.45:
                     if self.parrot:
                         self.tts.say(value[0])
+                elif value[0]=='BITE ME' and value[1]>0.4:
+                    if self.parrot:
+                        self.tts.say(value[0])
+                elif value[0]=='HASTA LA VISTA BABY' and value[1]>0.3:
+                    if self.parrot:
+                        self.tts.say(value[0])
+                else:
+                    pass
+
         except: 
             pass
         
@@ -103,6 +125,21 @@ class SpeechRecog(ALModule):
     def setActionStatus(self, status=False):
         global action_status
         action_status = status
+    
+    def getCutStatus(self):
+        global cut_status
+        return cut_status
+
+    def setCutStatus(self, status=False):
+        global cut_status
+        cut_status = status
+
+    def cutEnable(self):
+        self.cutEnable = True
+    
+    def cutdisable(self):
+        self.cutEnable = False
+    
 
     def start(self):
         print('start')
