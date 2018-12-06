@@ -20,5 +20,5 @@ class SimpleTracker:
     def unface(self):
         self.trackProxy.stopTracker()
         self.trackProxy.unregisterTarget('Face')
-        tracker.setEffector("None")
+        self.trackProxy.setEffector("None")
 

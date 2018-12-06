@@ -45,6 +45,7 @@ memory = None
 class SimpleSounds():
     def __init__(self, name):
         self.talkProxy = ALProxy("ALTextToSpeech", Config.ROBOT_IP, Config.PORT)
+        self.talkProxy.setVolume(0.5)
         # try:
         #     p = ALProxy(name)
         #     p.exit()

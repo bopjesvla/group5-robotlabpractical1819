@@ -26,3 +26,7 @@ class SimpleEyes:
     def noEyes(self):
         name = 'FaceLeds'
         self.eyeProxy.fade(name, 0, 1.0)
+    def greenEyes(self):
+        name = 'FaceLeds'
+        duration = 1.0
+        self.eyeProxy.fadeRGB(name, 0, 1, 0, duration)
