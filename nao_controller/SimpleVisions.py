@@ -68,7 +68,7 @@ class SimpleVisions:
         array = picture[6]
         realPicture = Image.frombytes("RGB", (picWidth, picHeight), array)
         realPicture.save(theName, "PNG")
-        realPicture.show()
+        # realPicture.show()
 
     def showImage(self, img):
         img = Image.open("terminated.png")
