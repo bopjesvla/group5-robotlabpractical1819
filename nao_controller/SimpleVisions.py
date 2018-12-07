@@ -55,6 +55,21 @@ class SimpleVisions:
         # rootImage.mainloop()
         pass
 
+    def takePicture(self, theName):
+        #motionObj.moveHeadPitch(0.3, 0.4)
+        #time.sleep(2)
+        videoClient = self.visionProxy.subscribeCamera("python_client", 0, resolution, colorSpace, 5)
+        self.visionProxy.setCameraParameter(videoClient, 18, 0)
+        picture = self.visionProxy.getImageRemote(videoClient)
+        #picture2 = self.visionProxy.getImageLocal(videoClient)
+        self.visionProxy.unsubscribe(videoClient)
+        picWidth = picture[0]
+        picHeight = picture[1]
+        array = picture[6]
+        realPicture = Image.frombytes("RGB", (picWidth, picHeight), array)
+        realPicture.save(theName, "PNG")
+        realPicture.show()
+
     def showImage(self, img):
         img = Image.open("terminated.png")
         self.panel.configure(image=img)
